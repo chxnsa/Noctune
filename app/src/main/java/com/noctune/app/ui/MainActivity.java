@@ -1,6 +1,8 @@
 package com.noctune.app.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -8,12 +10,36 @@ import com.noctune.app.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SharedPreferences prefs;
+    private boolean isDarkMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Apply tema sebelum setContentView
+        // Sesuai modul SharedPreferences
+        prefs = getSharedPreferences("noctune_prefs", MODE_PRIVATE);
+        isDarkMode = prefs.getBoolean("dark_mode", true);
+        applyTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Load fragment pertama saat app dibuka
+        // Setup toggle tema
+        TextView tvThemeToggle = findViewById(R.id.tv_theme_toggle);
+        tvThemeToggle.setText(isDarkMode ? "☀" : "🌙");
+
+        tvThemeToggle.setOnClickListener(v -> {
+            // Simpan preferensi tema — sesuai modul SharedPreferences
+            isDarkMode = !isDarkMode;
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("dark_mode", isDarkMode);
+            editor.apply();
+
+            // Restart activity agar tema berubah
+            recreate();
+        });
+
+        // Setup Bottom Navigation
         loadFragment(new HomeFragment());
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -33,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
             return loadFragment(selectedFragment);
         });
+    }
+
+    private void applyTheme() {
+        if (isDarkMode) {
+            setTheme(R.style.Theme_Noctune_Dark);
+        } else {
+            setTheme(R.style.Theme_Noctune_Light);
+        }
     }
 
     private boolean loadFragment(Fragment fragment) {
