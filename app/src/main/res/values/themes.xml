@@ -1,9 +1,17 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Noctune" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<resources>
+    <!-- Light Theme -->
+    <style name="Theme.Noctune.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#FFD600</item>
+        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="android:windowBackground">#F9F9F9</item>
     </style>
 
-    <style name="Theme.Noctune" parent="Base.Theme.Noctune" />
+    <!-- Dark Theme -->
+    <style name="Theme.Noctune.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">#FFD600</item>
+        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="android:windowBackground">#000000</item>
+    </style>
 </resources>
