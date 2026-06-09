@@ -6,10 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:theme="@style/Theme.Noctune">
+        android:theme="@style/Theme.Noctune.Dark">
 
         <!-- Splash sebagai Launcher -->
-        <activity android:name=".ui.splash.SplashActivity"
+        <activity android:name=".ui.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,11 +18,11 @@
         </activity>
 
         <!-- Main Activity -->
-        <activity android:name=".ui.main.MainActivity"
+        <activity android:name=".ui.MainActivity"
             android:exported="false" />
 
         <!-- Detail Activity -->
-        <activity android:name=".ui.detail.DetailActivity"
+        <activity android:name=".ui.DetailActivity"
             android:exported="false" />
 
     </application>

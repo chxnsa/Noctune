@@ -4,64 +4,69 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="#FFFFFF"
-    android:layout_marginBottom="3dp">
+    android:padding="16dp"
+    android:background="@color/bg_surface"
+    android:gravity="center_vertical"
+    style="@style/Widget.AppCompat.Light.ActionBar.Solid">
 
-    <!-- Cover/Thumbnail -->
-    <ImageView
-        android:id="@+id/iv_track_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:scaleType="centerCrop"
-        android:background="#000000"/>
+    <!-- Nomor Urut Track Ledger -->
+    <TextView
+        android:id="@+id/tv_track_number"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:text="01"
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp"
+        android:fontFamily="@font/space_mono"/>
 
-    <!-- Info -->
+    <!-- Detail Meta Info -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginStart="12dp"
-        android:gravity="center_vertical">
+        android:layout_marginEnd="10dp">
 
-        <!-- Nama lagu -->
         <TextView
             android:id="@+id/tv_track_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:fontFamily="@font/bebas_neue"
+            android:textAllCaps="true"
+            android:letterSpacing="0.01"/>
 
-        <!-- Nama artis -->
         <TextView
             android:id="@+id/tv_artist_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#666666"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"
-            android:layout_marginTop="2dp"
-            android:maxLines="1"
-            android:ellipsize="end"/>
-
-        <!-- Playcount -->
-        <TextView
-            android:id="@+id/tv_playcount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FFD600"
-            android:textSize="11sp"
-            android:layout_marginTop="4dp"/>
-
+            android:fontFamily="@font/space_mono"
+            android:layout_marginTop="2dp"/>
     </LinearLayout>
 
-    <!-- Divider kanan — aksen desain Noctune -->
-    <View
-        android:layout_width="4dp"
-        android:layout_height="match_parent"
-        android:background="#FFD600"/>
+    <!-- Durasi lagu di sebelah kanan -->
+    <TextView
+        android:id="@+id/tv_playcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3:39"
+        android:textColor="@color/text_primary"
+        android:textSize="13sp"
+        android:fontFamily="@font/space_mono"
+        android:textStyle="bold"
+        android:layout_marginEnd="16dp"/>
+
+    <!-- Representasi Simbol Play Menggunakan Text Teknis -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAY"
+        android:textColor="@color/brand_green"
+        android:textSize="12sp"
+        android:fontFamily="@font/space_mono"
+        android:textStyle="bold"/>
 
 </LinearLayout>

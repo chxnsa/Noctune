@@ -5,8 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:background="#FFFFFF"
-    android:layout_marginBottom="3dp">
+    android:background="@drawable/brutalist_flat_card"
+    android:layout_marginBottom="8dp"
+    android:gravity="center_vertical">
 
     <!-- Thumbnail -->
     <ImageView
@@ -14,7 +15,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:scaleType="centerCrop"
-        android:background="#000000"/>
+        android:background="@color/border_color"/>
 
     <!-- Info -->
     <LinearLayout
@@ -22,16 +23,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginStart="12dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="14dp">
 
         <TextView
             android:id="@+id/tv_fave_track_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:fontFamily="@font/bebas_neue"
             android:maxLines="1"
             android:ellipsize="end"/>
 
@@ -39,21 +39,24 @@
             android:id="@+id/tv_fave_artist_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#666666"
-            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="@font/chivo"
+            android:textSize="13sp"
             android:layout_marginTop="2dp"/>
-
     </LinearLayout>
 
-    <!-- Tombol hapus -->
+    <!-- Tombol hapus (Diganti tulisan DEL teknis agar rapi) -->
     <TextView
         android:id="@+id/tv_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="✕"
-        android:textColor="#E63329"
-        android:textSize="18sp"
-        android:padding="8dp"/>
+        android:text="[ REMOVE ]"
+        android:textColor="@color/brand_red"
+        android:textSize="12sp"
+        android:fontFamily="@font/space_mono"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"/>
 
 </LinearLayout>

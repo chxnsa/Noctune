@@ -5,22 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#F9F9F9">
+    android:background="@color/bg_main"
+    android:padding="24dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RADIO"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:text="RADIO NODE"
+        android:textColor="@color/text_primary"
+        android:textSize="40sp"
+        android:fontFamily="@font/bebas_neue"
+        android:letterSpacing="0.05"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Coming Soon"
-        android:textColor="#666666"
-        android:textSize="14sp"/>
+        android:text="STATION_TRANSMISSION_COMING_SOON"
+        android:textColor="@color/brand_red"
+        android:textSize="12sp"
+        android:fontFamily="@font/space_mono"
+        android:textStyle="bold"/>
 
 </LinearLayout>

@@ -6,22 +6,22 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.noctune.app.ui.home.HomeFragment"
+        android:name="com.noctune.app.ui.HomeFragment"
         android:label="Home" />
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="com.noctune.app.ui.explore.ExploreFragment"
+        android:name="com.noctune.app.ui.ExploreFragment"
         android:label="Explore" />
 
     <fragment
         android:id="@+id/favesFragment"
-        android:name="com.noctune.app.ui.faves.FavesFragment"
+        android:name="com.noctune.app.ui.FavesFragment"
         android:label="Faves" />
 
     <fragment
         android:id="@+id/radioFragment"
-        android:name="com.noctune.app.ui.radio.RadioFragment"
+        android:name="com.noctune.app.ui.RadioFragment"
         android:label="Radio" />
 
 </navigation>

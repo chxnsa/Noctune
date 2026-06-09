@@ -1,40 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:orientation="vertical"
+    android:background="@color/bg_main">
 
-    <ImageView
-        android:id="@+id/iv_logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_centerInParent="true"
-        android:src="@mipmap/ic_launcher"/>
+    <!-- 1. TECHNICAL HEADER GRID BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@color/bg_surface">
 
-    <!-- App name -->
-    <TextView
-        android:id="@+id/tv_app_name"
-        android:layout_width="wrap_content"
+        <!-- Left Cell (Version Label) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="V.01_MUSIC"
+                android:textColor="@color/brand_yellow"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/space_mono"/>
+        </LinearLayout>
+
+        <!-- Vertical Division Grid Line -->
+        <View
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:background="@color/border_color"/>
+
+        <!-- Right Cell (BPM Status) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:paddingEnd="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BPM_128"
+                android:textColor="@color/brand_red"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/space_mono"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Main Division Rule -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/border_color"/>
+
+    <!-- 2. MAIN HERO VISUAL AREA -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="24dp">
+
+        <!-- Background Diagonal Block Accent (Retro Hardware Aesthetics) -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:background="@color/border_color"
+            android:alpha="0.2"/>
+
+        <!-- Hard-Offset Shadow Frame for Logo -->
+        <FrameLayout
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_centerInParent="true">
+
+            <!-- Deep Flat Solid Shadow -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/border_color"/>
+
+            <!-- Foreground Container Panel -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/brutalist_flat_card"
+                android:backgroundTint="@color/brand_yellow"
+                android:gravity="center"
+                android:padding="16dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_launcher" />
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
+
+    <!-- 3. SESSION INITIALIZATION CONTROLLER PANEL -->
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="NOCTUNE"
-        android:textColor="#FFD600"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:letterSpacing="0.2"/>
+        android:paddingHorizontal="32dp"
+        android:paddingBottom="40dp">
 
-    <!-- Versi app di bawah -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:text="V.01_MUSIC"
-        android:textColor="#FFD600"
-        android:textSize="12sp"/>
+        <!-- Controller Button Shadow -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="6dp"
+            android:background="@color/border_color" />
 
-</RelativeLayout>
+        <!-- Actual Interactive Controller Face -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="INITIALIZE SESSION"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/space_mono"
+            android:background="@drawable/brutalist_flat_card"
+            android:backgroundTint="@color/brand_yellow"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:letterSpacing="0.05"/>
+    </FrameLayout>
+
+    <!-- Division Rule before diagnostics -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/border_color"/>
+
+    <!-- 4. DIAGNOSTICS FOOTER LED LEDGER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:background="@color/bg_surface">
+
+        <!-- Diagnostics Status Left -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SYSTEM STATUS"
+                android:textColor="@color/text_secondary"
+                android:textSize="10sp"
+                android:fontFamily="@font/space_mono"
+                android:letterSpacing="0.02"/>
+
+            <!-- Active indicator with physical LED circle dot style -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp">
+
+                <!-- Physical LED Dot (Uses circle_indicator.xml) -->
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/circle_indicator"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACTIVE / OPTIMIZED"
+                    android:textColor="@color/text_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/space_mono"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Vertical Division Grid Line -->
+        <View
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:background="@color/border_color"/>
+
+        <!-- OS Designation Right -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:gravity="center_vertical|end"
+            android:paddingEnd="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NOCTUNE_OS"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:fontFamily="@font/bebas_neue"
+                android:letterSpacing="0.05"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

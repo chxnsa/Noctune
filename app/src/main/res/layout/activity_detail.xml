@@ -1,169 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F9F9">
+    android:background="@color/bg_main">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Hero block — warna kuning sesuai desain Noctune -->
+        <!-- Hero Poster Block (Kuning Pekat + Vinyl Lingkaran Sempurna) -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:background="#FFD600">
+            android:layout_height="260dp"
+            android:background="@color/brand_yellow"
+            android:padding="20dp"
+            style="@style/Widget.AppCompat.Light.ActionBar.Solid">
 
-            <!-- Thumbnail lagu -->
-            <ImageView
-                android:id="@+id/iv_detail_image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerInParent="true"
-                android:scaleType="centerCrop"
-                android:background="#000000"/>
-
-            <!-- Tombol back -->
-            <TextView
-                android:id="@+id/tv_back"
+            <!-- Label Atas Khas Braun Hardware Style -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:padding="16dp"
-                android:text="← BACK"
-                android:textColor="#000000"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
+                android:layout_top="true">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/border_color"
+                    android:text=" GENRE: "
+                    android:textColor="@color/bg_surface"
+                    android:textSize="12sp"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:fontFamily="@font/space_mono"
+                    android:textStyle="bold"/>
 
-        <!-- Info block -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="#000000">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="KRAUTROCK"
+                    android:textColor="@color/border_color"
+                    android:textSize="18sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/bebas_neue"/>
+            </LinearLayout>
 
-            <!-- Nama lagu -->
+            <!-- Vinyl representation (Satu-satunya elemen lingkaran murni) -->
+            <View
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_alignParentEnd="true"
+                android:layout_top="true"
+                android:layout_marginTop="-20dp"
+                android:layout_marginEnd="-40dp"
+                android:background="@drawable/brutalist_flat_card"
+                android:backgroundTint="@color/border_color"
+                android:alpha="0.12"/>
+
+            <!-- Judul Track Utama Berukuran Raksasa -->
             <TextView
                 android:id="@+id/tv_detail_track_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFD600"
-                android:textSize="28sp"
-                android:textStyle="bold"/>
+                android:layout_alignParentBottom="true"
+                android:text="KRAFTWERK"
+                android:textColor="@color/border_color"
+                android:textSize="48sp"
+                android:fontFamily="@font/bebas_neue"
+                android:letterSpacing="0.02"/>
 
-            <!-- Nama artis -->
-            <TextView
-                android:id="@+id/tv_detail_artist_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:layout_marginTop="4dp"/>
+        </RelativeLayout>
 
-        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/border_color"/>
 
-        <!-- Stats block -->
+        <!-- Stats Block Berbentuk Technical Grid Meter -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="#1A1A1A"
-            android:padding="16dp">
+            android:background="@color/bg_surface">
 
-            <!-- Listeners -->
+            <!-- Listeners Node -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/tv_listeners"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#FFD600"
-                    android:textSize="24sp"
+                    android:text="4.2M"
+                    android:textColor="@color/text_primary"
+                    android:textSize="40sp"
+                    android:fontFamily="@font/space_mono"
                     android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LISTENERS"
-                    android:textColor="#666666"
-                    android:textSize="11sp"/>
-
+                    android:text="MONTHLY LISTENERS"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/space_mono"/>
             </LinearLayout>
 
-            <!-- Playcount -->
+            <!-- Batas vertikal antar kolom grid -->
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="@color/border_color"/>
+
+            <!-- Playcount Node -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/tv_detail_playcount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#FFD600"
-                    android:textSize="24sp"
+                    android:text="12"
+                    android:textColor="@color/text_primary"
+                    android:textSize="40sp"
+                    android:fontFamily="@font/space_mono"
                     android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PLAYS"
-                    android:textColor="#666666"
-                    android:textSize="11sp"/>
-
-            </LinearLayout>
-
-            <!-- Duration -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/tv_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#FFD600"
-                    android:textSize="24sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DURATION"
-                    android:textColor="#666666"
-                    android:textSize="11sp"/>
-
+                    android:text="ALBUMS AVAILABLE"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/space_mono"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Tombol Save to Favorites -->
-        <Button
-            android:id="@+id/btn_fave"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/border_color"/>
+
+        <!-- Tombol Aksi Utama Favorit Dengan Bayangan Offset Brutalis Kaku -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="♥ SAVE TO FAVORITES"
-            android:backgroundTint="#FFD600"
-            android:textColor="#000000"
-            android:textStyle="bold"/>
+            android:padding="20dp">
+
+            <!-- Layer belakang / Ghost offset shadow -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="6dp"
+                android:background="@color/border_color" />
+
+            <!-- Tombol interaktif asli yang tergeser -->
+            <Button
+                android:id="@+id/btn_fave"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="ADD TO LABORATORY FAVES"
+                android:backgroundTint="@color/brand_red"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:fontFamily="@font/space_mono"
+                app:cornerRadius="0dp"/>
+        </FrameLayout>
 
     </LinearLayout>
-
 </ScrollView>
