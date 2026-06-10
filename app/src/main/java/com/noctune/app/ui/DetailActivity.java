@@ -60,6 +60,8 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvBack = findViewById(R.id.tv_back);
         btnFave = findViewById(R.id.btn_fave);
         Button btnYoutube = findViewById(R.id.btn_youtube);
+        Button btnAddPlaylist = findViewById(R.id.btn_add_playlist);
+        btnAddPlaylist.setOnClickListener(v -> showAddToPlaylistDialog());
         tvLyrics = findViewById(R.id.tv_lyrics);
         pbLyrics = findViewById(R.id.pb_lyrics);
 
@@ -277,5 +279,70 @@ public class DetailActivity extends AppCompatActivity {
         if (musicHelper != null) {
             musicHelper.close();
         }
+    }
+
+    private void showAddToPlaylistDialog() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            musicHelper.open();
+            android.database.Cursor cursor = musicHelper.queryAllPlaylists();
+            ArrayList<com.noctune.app.model.Playlist> playlists =
+                    com.noctune.app.database.MappingHelper.mapCursorToPlaylists(cursor);
+            cursor.close();
+
+            handler.post(() -> {
+                if (playlists.isEmpty()) {
+                    Toast.makeText(this,
+                            "No playlists yet! Create one in Faves tab.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Buat array nama playlist untuk dialog
+                String[] names = new String[playlists.size()];
+                for (int i = 0; i < playlists.size(); i++) {
+                    names[i] = playlists.get(i).getName();
+                }
+
+                new AlertDialog.Builder(this)
+                        .setTitle("ADD TO PLAYLIST")
+                        .setItems(names, (dialog, which) -> {
+                            addTrackToPlaylist(playlists.get(which));
+                        })
+                        .show();
+            });
+        });
+    }
+
+    private void addTrackToPlaylist(com.noctune.app.model.Playlist playlist) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            ContentValues values = new ContentValues();
+            values.put(com.noctune.app.database.DatabaseContract
+                    .PlaylistTrackColumns.PLAYLIST_ID, playlist.getId());
+            values.put(com.noctune.app.database.DatabaseContract
+                    .PlaylistTrackColumns.TRACK_NAME, track.getName());
+            values.put(com.noctune.app.database.DatabaseContract
+                            .PlaylistTrackColumns.ARTIST_NAME,
+                    track.getArtist() != null ? track.getArtist().getName() : "");
+            values.put(com.noctune.app.database.DatabaseContract
+                    .PlaylistTrackColumns.DURATION, track.getDuration());
+            values.put(com.noctune.app.database.DatabaseContract
+                    .PlaylistTrackColumns.IMAGE_URL, track.getImageUrl());
+
+            long result = musicHelper.insertTrackToPlaylist(values);
+
+            handler.post(() -> {
+                if (result > 0) {
+                    Toast.makeText(this,
+                            "Added to " + playlist.getName(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 }

@@ -5,81 +5,199 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/bg_main">
+    android:background="#F9F9F9"> <!-- Menggunakan warna dasar terang khas Noctune -->
 
-    <!-- Header Block Hitam Pekat -->
+    <!-- ==========================================
+         HEADER BLOCK (Swiss Typography Header)
+         ========================================== -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/border_color"
-        android:orientation="horizontal"
-        android:padding="24dp"
-        android:gravity="center_vertical">
+        android:background="#000000"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ARCHIVE . VOL_04"
-                android:textColor="@color/brand_yellow"
-                android:textSize="12sp"
-                android:fontFamily="@font/space_mono"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="YOUR\nFAVORITES"
-                android:textColor="@color/bg_surface"
-                android:textSize="40sp"
-                android:fontFamily="@font/bebas_neue"
-                android:lineSpacingMultiplier="0.85"/>
-        </LinearLayout>
-
-        <!-- Shuffle Button Berbentuk Kotak Kuning Blok Tanpa Radius -->
-        <Button
-            android:id="@+id/btn_shuffle"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SHUFFLE\nALL"
+            android:text="ARCHIVE . VOL_04"
+            android:textColor="#FFD600"
             android:textSize="12sp"
             android:fontFamily="@font/space_mono"
-            android:textStyle="bold"
-            android:backgroundTint="@color/brand_yellow"
-            android:textColor="#000000"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="12dp"
-            app:cornerRadius="0dp"/>
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="YOUR FAVORITES"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            android:fontFamily="@font/bebas_neue"
+            android:lineSpacingMultiplier="0.85"
+            android:letterSpacing="0.02"/>
     </LinearLayout>
 
+    <!-- Batas Border Tebal -->
     <View
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:background="@color/border_color"/>
+        android:background="#000000"/>
 
-    <!-- Empty State -->
-    <TextView
-        android:id="@+id/tv_empty"
+    <!-- ==========================================
+         TAB SELECTOR BLOCK (Geometric Heavy Grid)
+         ========================================== -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="NO FAVORITES RECORDED"
-        android:textColor="@color/text_secondary"
-        android:textSize="14sp"
-        android:fontFamily="@font/space_mono"
-        android:gravity="center"
-        android:layout_marginTop="60dp"
-        android:visibility="gone"/>
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="#000000">
 
-    <!-- List Ledger Lagu-lagu Favorit -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_faves"
+        <!-- TAB FAVORITES (Kondisi Aktif/Selected) -->
+        <LinearLayout
+            android:id="@+id/tab_faves"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="#FFD600"> <!-- Warna Kuning Isyarat Utama -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01 / TRACKS"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/space_mono"/>
+        </LinearLayout>
+
+        <!-- Garis Pemisah Antar Tab -->
+        <View
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:background="#000000"/>
+
+        <!-- TAB PLAYLISTS (Kondisi Tidak Aktif) -->
+        <LinearLayout
+            android:id="@+id/tab_playlists"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="#FFFFFF"> <!-- Memakai White Block kontras tinggi -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="02 / PLAYLISTS"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/space_mono"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Border Bawah Tab Selector -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#000000"/>
+
+    <!-- ==========================================
+         VIEWPORT CONTAINER (Switchable Layouts)
+         ========================================== -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
+        android:background="#000000"> <!-- Latar belakang hitam pekat untuk grid ledger -->
+
+        <!-- CONTAINER 1: FAVORITES CONTENT -->
+        <LinearLayout
+            android:id="@+id/view_faves_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <!-- Empty State System Message -->
+            <TextView
+                android:id="@+id/tv_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="80dp"
+                android:background="#FFFFFF"
+                android:padding="24dp"
+                android:text="[NOTICE_01: DIRECTORY_EMPTY]\n\nNo tracks have been registered as favorite. Tag items from core console."
+                android:textColor="#E63329"
+                android:textSize="13sp"
+                android:fontFamily="@font/space_mono"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.3"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_faves"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+
+        <!-- CONTAINER 2: PLAYLISTS CONTENT -->
+        <LinearLayout
+            android:id="@+id/view_playlists_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Tombol Buat Playlist (Brutalist Fixed Grid Button) -->
+            <TextView
+                android:id="@+id/btn_new_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFD600"
+                android:text="+ CREATE NEW DIRECTORY"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/space_mono"
+                android:gravity="center"
+                android:padding="16dp"/>
+
+            <!-- Garis pemisah bawah tombol directory -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#000000"/>
+
+            <!-- Empty State System Message -->
+            <TextView
+                android:id="@+id/tv_empty_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="80dp"
+                android:background="#FFFFFF"
+                android:padding="24dp"
+                android:text="[NOTICE_02: NO_PLAYLISTS_FOUND]\n\nInitialization needed. Tap the bar above to create a new music container."
+                android:textColor="#4C4546"
+                android:textSize="13sp"
+                android:fontFamily="@font/space_mono"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.3"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_playlists"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

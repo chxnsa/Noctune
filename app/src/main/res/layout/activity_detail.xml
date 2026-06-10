@@ -212,61 +212,89 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:weightSum="2">
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginBottom="16dp">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="5dp"
+                        android:background="#000000" />
+
+                    <Button
+                        android:id="@+id/btn_fave"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="♥ SAVE TO FAVES"
+                        android:backgroundTint="@color/brand_yellow"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/space_mono"
+                        app:cornerRadius="0dp"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="5dp"
+                        android:background="#000000" />
+
+                    <Button
+                        android:id="@+id/btn_youtube"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="▶ YOUTUBE"
+                        android:backgroundTint="@color/brand_red"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/space_mono"
+                        app:cornerRadius="0dp"/>
+                </FrameLayout>
+            </LinearLayout>
 
             <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="5dp"
-                    android:background="@color/border_color" />
+                    android:background="#000000" />
 
                 <Button
-                    android:id="@+id/btn_fave"
+                    android:id="@+id/btn_add_playlist"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="♥ SAVE TO FAVES"
-                    android:backgroundTint="@color/brand_yellow"
-                    android:textColor="@color/border_color"
-                    android:textStyle="bold"
+                    android:text="+ ADD TO PLAYLIST"
+                    android:backgroundTint="#1A1A1A" android:textColor="@color/brand_yellow" android:textStyle="bold"
                     android:textSize="12sp"
                     android:fontFamily="@font/space_mono"
-                    app:cornerRadius="0dp"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@color/border_color" />
-
-                <Button
-                    android:id="@+id/btn_youtube"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="▶ YOUTUBE"
-                    android:backgroundTint="@color/brand_red"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/space_mono"
-                    app:cornerRadius="0dp"/>
-            </FrameLayout>
+                    app:cornerRadius="0dp"/> </FrameLayout>
 
         </LinearLayout>
 

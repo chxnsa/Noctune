@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static String DATABASE_NAME = "Noctune.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // naikan versi!
 
-    private static final String SQL_CREATE_TABLE =
+    // Tabel favorites
+    private static final String SQL_CREATE_FAVORITES =
             String.format(
                     "CREATE TABLE %s" +
                             " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -29,18 +30,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     DatabaseContract.FavColumns.IMAGE_URL
             );
 
+    // Tabel playlists
+    private static final String SQL_CREATE_PLAYLISTS =
+            String.format(
+                    "CREATE TABLE %s" +
+                            " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            " %s TEXT NOT NULL," +
+                            " %s TEXT)",
+                    DatabaseContract.TABLE_PLAYLIST,
+                    DatabaseContract.PlaylistColumns._ID,
+                    DatabaseContract.PlaylistColumns.PLAYLIST_NAME,
+                    DatabaseContract.PlaylistColumns.CREATED_AT
+            );
+
+    // Tabel playlist_tracks
+    private static final String SQL_CREATE_PLAYLIST_TRACKS =
+            String.format(
+                    "CREATE TABLE %s" +
+                            " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            " %s INTEGER NOT NULL," +
+                            " %s TEXT NOT NULL," +
+                            " %s TEXT NOT NULL," +
+                            " %s TEXT," +
+                            " %s TEXT)",
+                    DatabaseContract.TABLE_PLAYLIST_TRACKS,
+                    DatabaseContract.PlaylistTrackColumns._ID,
+                    DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID,
+                    DatabaseContract.PlaylistTrackColumns.TRACK_NAME,
+                    DatabaseContract.PlaylistTrackColumns.ARTIST_NAME,
+                    DatabaseContract.PlaylistTrackColumns.DURATION,
+                    DatabaseContract.PlaylistTrackColumns.IMAGE_URL
+            );
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_TABLE);
+        db.execSQL(SQL_CREATE_FAVORITES);
+        db.execSQL(SQL_CREATE_PLAYLISTS);
+        db.execSQL(SQL_CREATE_PLAYLIST_TRACKS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_PLAYLIST);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_PLAYLIST_TRACKS);
         onCreate(db);
     }
 }

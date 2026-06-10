@@ -52,6 +52,77 @@ public class MusicHelper {
                 new String[]{id});
     }
 
+    // Buat playlist baru
+    public long insertPlaylist(ContentValues values) {
+        return database.insert(DatabaseContract.TABLE_PLAYLIST, null, values);
+    }
+
+    // Ambil semua playlist
+    public Cursor queryAllPlaylists() {
+        return database.query(
+                DatabaseContract.TABLE_PLAYLIST,
+                null, null, null, null, null,
+                DatabaseContract.PlaylistColumns._ID + " ASC"
+        );
+    }
+
+    // Hapus playlist by id
+    public int deletePlaylist(String id) {
+        // Hapus semua track dalam playlist dulu
+        database.delete(
+                DatabaseContract.TABLE_PLAYLIST_TRACKS,
+                DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID + " = ?",
+                new String[]{id}
+        );
+        // Baru hapus playlist
+        return database.delete(
+                DatabaseContract.TABLE_PLAYLIST,
+                DatabaseContract.PlaylistColumns._ID + " = ?",
+                new String[]{id}
+        );
+    }
+
+    // Tambah track ke playlist
+    public long insertTrackToPlaylist(ContentValues values) {
+        return database.insert(
+                DatabaseContract.TABLE_PLAYLIST_TRACKS, null, values);
+    }
+
+    // Ambil semua track dalam playlist
+    public Cursor queryTracksByPlaylist(String playlistId) {
+        return database.query(
+                DatabaseContract.TABLE_PLAYLIST_TRACKS,
+                null,
+                DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID + " = ?",
+                new String[]{playlistId},
+                null, null,
+                DatabaseContract.PlaylistTrackColumns._ID + " ASC"
+        );
+    }
+
+    // Hapus track dari playlist
+    public int deleteTrackFromPlaylist(String trackId) {
+        return database.delete(
+                DatabaseContract.TABLE_PLAYLIST_TRACKS,
+                DatabaseContract.PlaylistTrackColumns._ID + " = ?",
+                new String[]{trackId}
+        );
+    }
+
+    // Hitung jumlah track dalam playlist
+    public int countTracksInPlaylist(String playlistId) {
+        Cursor cursor = database.query(
+                DatabaseContract.TABLE_PLAYLIST_TRACKS,
+                null,
+                DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID + " = ?",
+                new String[]{playlistId},
+                null, null, null
+        );
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
     // Ambil semua favorit
     public Cursor queryAll() {
         return database.query(
