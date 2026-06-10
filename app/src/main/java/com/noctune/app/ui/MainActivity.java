@@ -26,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup toggle tema
         TextView tvThemeToggle = findViewById(R.id.tv_theme_toggle);
-        tvThemeToggle.setText(isDarkMode ? "☀" : "🌙");
+
+        // Mengubah teks indikator konsol sesuai status tema, bukan pakai emotikon bulat
+        tvThemeToggle.setText(isDarkMode ? "[ MODE: DARK ]" : "[ MODE: LIGHT ]");
 
         tvThemeToggle.setOnClickListener(v -> {
             // Simpan preferensi tema — sesuai modul SharedPreferences

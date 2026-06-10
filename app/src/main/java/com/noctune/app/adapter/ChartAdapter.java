@@ -35,7 +35,7 @@ public class ChartAdapter extends RecyclerView.Adapter<ChartAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_chart, parent, false);
+                .inflate(R.layout.item_charts, parent, false);
         return new ViewHolder(view);
     }
 

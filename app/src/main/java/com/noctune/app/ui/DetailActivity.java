@@ -12,15 +12,21 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.noctune.app.R;
 import com.noctune.app.database.DatabaseContract;
 import com.noctune.app.database.MusicHelper;
 import com.noctune.app.model.LyricsResponse;
+import com.noctune.app.model.Playlist;
 import com.noctune.app.model.Track;
 import com.noctune.app.network.LyricsClient;
 import com.noctune.app.network.LyricsService;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
@@ -288,7 +294,7 @@ public class DetailActivity extends AppCompatActivity {
         executor.execute(() -> {
             musicHelper.open();
             android.database.Cursor cursor = musicHelper.queryAllPlaylists();
-            ArrayList<com.noctune.app.model.Playlist> playlists =
+            ArrayList<Playlist> playlists =
                     com.noctune.app.database.MappingHelper.mapCursorToPlaylists(cursor);
             cursor.close();
 

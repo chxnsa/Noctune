@@ -4,17 +4,15 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <!-- Struktur Rumah Kotak Mekanis -->
     <path
-        android:strokeColor="#000000"
-        android:strokeWidth="3dp"
+        android:strokeColor="@color/border_color"
+        android:strokeWidth="3"
         android:strokeLineJoin="miter"
         android:strokeLineCap="square"
         android:pathData="M3,21 V10 L12,4 L21,10 V21 Z" />
-    <!-- Pintu Kotak Siku-Siku -->
     <path
-        android:strokeColor="#000000"
-        android:strokeWidth="3dp"
+        android:strokeColor="@color/border_color"
+        android:strokeWidth="3"
         android:strokeLineJoin="miter"
         android:strokeLineCap="square"
         android:pathData="M10,21 V14 H14 V21" />
