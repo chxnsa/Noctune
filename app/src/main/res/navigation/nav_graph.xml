@@ -20,8 +20,8 @@
         android:label="Faves" />
 
     <fragment
-        android:id="@+id/radioFragment"
-        android:name="com.noctune.app.ui.RadioFragment"
+        android:id="@+id/chartFragment"
+        android:name="com.noctune.app.ui.ChartsFragment"
         android:label="Radio" />
 
 </navigation>

@@ -1,21 +1,31 @@
 package com.noctune.app.ui;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.noctune.app.R;
 import com.noctune.app.database.DatabaseContract;
 import com.noctune.app.database.MusicHelper;
+import com.noctune.app.model.LyricsResponse;
 import com.noctune.app.model.Track;
+import com.noctune.app.network.LyricsClient;
+import com.noctune.app.network.LyricsService;
 import com.squareup.picasso.Picasso;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -24,17 +34,20 @@ public class DetailActivity extends AppCompatActivity {
     private Button btnFave;
     private boolean isFavorite = false;
 
+    // Lyrics
+    private TextView tvLyrics;
+    private ProgressBar pbLyrics;
+    private LyricsService lyricsService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        // Sembunyikan action bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // Terima data Track dari Intent — sesuai syarat Intent tugas
         track = getIntent().getParcelableExtra("track");
 
         // Init views
@@ -46,12 +59,17 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvDuration = findViewById(R.id.tv_duration);
         TextView tvBack = findViewById(R.id.tv_back);
         btnFave = findViewById(R.id.btn_fave);
+        Button btnYoutube = findViewById(R.id.btn_youtube);
+        tvLyrics = findViewById(R.id.tv_lyrics);
+        pbLyrics = findViewById(R.id.pb_lyrics);
 
-        // Init SQLite — sesuai modul
+        // Init SQLite
         musicHelper = MusicHelper.getInstance(getApplicationContext());
         musicHelper.open();
 
-        // Isi data ke views
+        // Init Lyrics API
+        lyricsService = LyricsClient.getClient().create(LyricsService.class);
+
         if (track != null) {
             tvTrackName.setText(track.getName());
 
@@ -63,7 +81,6 @@ public class DetailActivity extends AppCompatActivity {
             tvPlaycount.setText(formatCount(track.getPlaycount()));
             tvDuration.setText(formatDuration(track.getDuration()));
 
-            // Load gambar dengan Picasso
             String imageUrl = track.getImageUrl();
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Picasso.get()
@@ -72,8 +89,10 @@ public class DetailActivity extends AppCompatActivity {
                         .into(ivImage);
             }
 
-            // Cek apakah sudah difavoritkan
             checkFavoriteStatus();
+
+            // Load lirik otomatis
+            loadLyrics();
         }
 
         // Tombol back
@@ -81,10 +100,77 @@ public class DetailActivity extends AppCompatActivity {
 
         // Tombol favorit
         btnFave.setOnClickListener(v -> toggleFavorite());
+
+        // Tombol YouTube — buka browser
+        btnYoutube.setOnClickListener(v -> openYoutube());
     }
 
+    private void loadLyrics() {
+        if (track.getArtist() == null) {
+            tvLyrics.setText("Artist info not available");
+            return;
+        }
+
+        // Tampilkan loading
+        pbLyrics.setVisibility(View.VISIBLE);
+        tvLyrics.setText("");
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            Call<LyricsResponse> call = lyricsService.getLyrics(
+                    track.getArtist().getName(),
+                    track.getName()
+            );
+
+            call.enqueue(new Callback<LyricsResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<LyricsResponse> call,
+                                       @NonNull Response<LyricsResponse> response) {
+                    handler.post(() -> {
+                        pbLyrics.setVisibility(View.GONE);
+
+                        if (response.isSuccessful() && response.body() != null
+                                && response.body().getLyrics() != null
+                                && !response.body().getLyrics().isEmpty()) {
+                            tvLyrics.setText(response.body().getLyrics());
+                        } else {
+                            tvLyrics.setText("Lyrics not found for this track.");
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<LyricsResponse> call,
+                                      @NonNull Throwable t) {
+                    handler.post(() -> {
+                        pbLyrics.setVisibility(View.GONE);
+                        tvLyrics.setText("Could not load lyrics.\nCheck your connection.");
+                    });
+                }
+            });
+        });
+    }
+
+    private void openYoutube() {
+        if (track == null) return;
+
+        String artistName = track.getArtist() != null ?
+                track.getArtist().getName() : "";
+        String query = artistName + " " + track.getName();
+
+        // Encode spasi jadi + untuk URL
+        String encodedQuery = query.trim().replace(" ", "+");
+        String youtubeUrl = "https://www.youtube.com/results?search_query=" + encodedQuery;
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl));
+        startActivity(intent);
+    }
+
+    // ---- Method lainnya tetap sama seperti sebelumnya ----
+
     private void checkFavoriteStatus() {
-        // Cek di background thread — sesuai syarat Background Thread tugas
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -92,7 +178,6 @@ public class DetailActivity extends AppCompatActivity {
             String artistName = track.getArtist() != null ?
                     track.getArtist().getName() : "";
             isFavorite = musicHelper.isFavorite(track.getName(), artistName);
-
             handler.post(() -> updateFaveButton());
         });
     }
@@ -103,9 +188,6 @@ public class DetailActivity extends AppCompatActivity {
 
         executor.execute(() -> {
             if (isFavorite) {
-                // Sudah favorit → hapus
-                // Tidak langsung pakai deleteById karena kita tidak punya _id
-                // Jadi kita query dulu
                 android.database.Cursor cursor = musicHelper.queryAll();
                 int idToDelete = -1;
                 String artistName = track.getArtist() != null ?
@@ -131,7 +213,6 @@ public class DetailActivity extends AppCompatActivity {
                 }
 
             } else {
-                // Belum favorit → simpan
                 ContentValues values = new ContentValues();
                 values.put(DatabaseContract.FavColumns.TRACK_NAME, track.getName());
                 values.put(DatabaseContract.FavColumns.ARTIST_NAME,
@@ -156,34 +237,29 @@ public class DetailActivity extends AppCompatActivity {
 
     private void updateFaveButton() {
         if (isFavorite) {
-            btnFave.setText("♥ SAVED TO FAVORITES");
+            btnFave.setText("♥ SAVED");
             btnFave.setBackgroundTintList(
                     android.content.res.ColorStateList.valueOf(
                             android.graphics.Color.parseColor("#E63329")));
         } else {
-            btnFave.setText("♥ SAVE TO FAVORITES");
+            btnFave.setText("♥ SAVE");
             btnFave.setBackgroundTintList(
                     android.content.res.ColorStateList.valueOf(
                             android.graphics.Color.parseColor("#FFD600")));
         }
     }
 
-    // Format angka
     private String formatCount(String countStr) {
         try {
             long count = Long.parseLong(countStr);
-            if (count >= 1_000_000) {
-                return String.format("%.1fM", count / 1_000_000.0);
-            } else if (count >= 1_000) {
-                return String.format("%.1fK", count / 1_000.0);
-            }
+            if (count >= 1_000_000) return String.format("%.1fM", count / 1_000_000.0);
+            else if (count >= 1_000) return String.format("%.1fK", count / 1_000.0);
             return String.valueOf(count);
         } catch (Exception e) {
             return countStr;
         }
     }
 
-    // Format durasi detik → menit:detik
     private String formatDuration(String durationStr) {
         try {
             int seconds = Integer.parseInt(durationStr);

@@ -11,29 +11,52 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Hero Poster Block (Kuning Pekat + Vinyl Lingkaran Sempurna) -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:background="@color/brand_yellow"
-            android:padding="20dp"
-            style="@style/Widget.AppCompat.Light.ActionBar.Solid">
+            android:layout_height="280dp"
+            android:background="#000000"> <ImageView
+            android:id="@+id/iv_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_album" />
 
-            <!-- Label Atas Khas Braun Hardware Style -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:alpha="0.6" /> <TextView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/brand_yellow" android:text="← BACK"
+                android:textColor="#000000"
+                android:textSize="11sp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:fontFamily="@font/space_mono"
+                android:textStyle="bold"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_alignParentStart="true"
-                android:layout_top="true">
+                android:layout_below="@id/tv_back"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/border_color"
+                    android:background="@color/brand_yellow"
                     android:text=" GENRE: "
-                    android:textColor="@color/bg_surface"
-                    android:textSize="12sp"
+                    android:textColor="#000000"
+                    android:textSize="11sp"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="2dp"
                     android:fontFamily="@font/space_mono"
@@ -43,35 +66,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="KRAUTROCK"
-                    android:textColor="@color/border_color"
-                    android:textSize="18sp"
+                    android:textColor="#FFFFFF" android:textSize="18sp"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/bebas_neue"/>
             </LinearLayout>
 
-            <!-- Vinyl representation (Satu-satunya elemen lingkaran murni) -->
-            <View
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_alignParentEnd="true"
-                android:layout_top="true"
-                android:layout_marginTop="-20dp"
-                android:layout_marginEnd="-40dp"
-                android:background="@drawable/brutalist_flat_card"
-                android:backgroundTint="@color/border_color"
-                android:alpha="0.12"/>
-
-            <!-- Judul Track Utama Berukuran Raksasa -->
-            <TextView
-                android:id="@+id/tv_detail_track_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_alignParentBottom="true"
-                android:text="KRAFTWERK"
-                android:textColor="@color/border_color"
-                android:textSize="48sp"
-                android:fontFamily="@font/bebas_neue"
-                android:letterSpacing="0.02"/>
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_detail_track_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="KRAFTWERK"
+                    android:textColor="@color/brand_yellow" android:textSize="48sp"
+                    android:fontFamily="@font/bebas_neue"
+                    android:letterSpacing="0.01"/>
+
+                <TextView
+                    android:id="@+id/tv_detail_artist_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RADIO-ACTIVITY"
+                    android:textColor="#FFFFFF" android:textSize="14sp"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/space_mono"/>
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -80,20 +105,18 @@
             android:layout_height="3dp"
             android:background="@color/border_color"/>
 
-        <!-- Stats Block Berbentuk Technical Grid Meter -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/bg_surface">
 
-            <!-- Listeners Node -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/tv_listeners"
@@ -101,50 +124,80 @@
                     android:layout_height="wrap_content"
                     android:text="4.2M"
                     android:textColor="@color/text_primary"
-                    android:textSize="40sp"
+                    android:textSize="32sp"
                     android:fontFamily="@font/space_mono"
                     android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MONTHLY LISTENERS"
+                    android:text="LISTENERS"
                     android:textColor="@color/text_secondary"
-                    android:textSize="11sp"
+                    android:textSize="10sp"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/space_mono"/>
             </LinearLayout>
 
-            <!-- Batas vertikal antar kolom grid -->
             <View
                 android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:background="@color/border_color"/>
 
-            <!-- Playcount Node -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/tv_detail_playcount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12"
+                    android:text="125K"
                     android:textColor="@color/text_primary"
-                    android:textSize="40sp"
+                    android:textSize="32sp"
                     android:fontFamily="@font/space_mono"
                     android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ALBUMS AVAILABLE"
+                    android:text="TOTAL PLAYS"
                     android:textColor="@color/text_secondary"
-                    android:textSize="11sp"
+                    android:textSize="10sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/space_mono"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="@color/border_color"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tv_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="03:24"
+                    android:textColor="@color/text_primary"
+                    android:textSize="32sp"
+                    android:fontFamily="@font/space_mono"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DURATION"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="10sp"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/space_mono"/>
             </LinearLayout>
@@ -156,33 +209,111 @@
             android:layout_height="3dp"
             android:background="@color/border_color"/>
 
-        <!-- Tombol Aksi Utama Favorit Dengan Bayangan Offset Brutalis Kaku -->
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:weightSum="2">
 
-            <!-- Layer belakang / Ghost offset shadow -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginStart="6dp"
-                android:background="@color/border_color" />
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp">
 
-            <!-- Tombol interaktif asli yang tergeser -->
-            <Button
-                android:id="@+id/btn_fave"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="ADD TO LABORATORY FAVES"
-                android:backgroundTint="@color/brand_red"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:textSize="14sp"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@color/border_color" />
+
+                <Button
+                    android:id="@+id/btn_fave"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="♥ SAVE TO FAVES"
+                    android:backgroundTint="@color/brand_yellow"
+                    android:textColor="@color/border_color"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/space_mono"
+                    app:cornerRadius="0dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@color/border_color" />
+
+                <Button
+                    android:id="@+id/btn_youtube"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="▶ YOUTUBE"
+                    android:backgroundTint="@color/brand_red"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/space_mono"
+                    app:cornerRadius="0dp"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/border_color"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@color/bg_main">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/border_color"
+                android:text=" LYRICS "
+                android:textColor="@color/bg_surface"
+                android:textSize="12sp"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
                 android:fontFamily="@font/space_mono"
-                app:cornerRadius="0dp"/>
-        </FrameLayout>
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <ProgressBar
+                android:id="@+id/pb_lyrics"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_lyrics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="13sp"
+                android:lineSpacingMultiplier="1.5"
+                android:text="[Loading system lyrics...]"
+                android:fontFamily="@font/space_mono"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

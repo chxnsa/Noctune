@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.noctune.app.R;
-import com.noctune.app.ui.ChartsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
