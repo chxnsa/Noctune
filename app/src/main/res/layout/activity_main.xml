@@ -40,7 +40,6 @@
             android:fontFamily="@font/bebas_neue"
             android:letterSpacing="0.15"/>
 
-        <!-- Pengganti emoji 🔍 dengan layout text bergaya minimalis -->
         <TextView
             android:id="@+id/tv_search_icon"
             android:layout_width="wrap_content"
@@ -61,7 +60,6 @@
         android:layout_height="3dp"
         android:background="@color/border_color"/>
 
-    <!-- Kontainer Fragment -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
@@ -73,7 +71,6 @@
         android:layout_height="3dp"
         android:background="@color/border_color"/>
 
-    <!-- Bottom Navigation Kotak Brutal Modern -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

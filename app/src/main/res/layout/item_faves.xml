@@ -9,7 +9,6 @@
     android:layout_marginBottom="8dp"
     android:gravity="center_vertical">
 
-    <!-- Thumbnail -->
     <ImageView
         android:id="@+id/iv_fave_image"
         android:layout_width="56dp"
@@ -17,7 +16,6 @@
         android:scaleType="centerCrop"
         android:background="@color/border_color"/>
 
-    <!-- Info -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -45,7 +43,6 @@
             android:layout_marginTop="2dp"/>
     </LinearLayout>
 
-    <!-- Tombol hapus (Diganti tulisan DEL teknis agar rapi) -->
     <TextView
         android:id="@+id/tv_delete"
         android:layout_width="wrap_content"

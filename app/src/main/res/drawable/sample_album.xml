@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="300dp"
+    android:viewportWidth="300"
+    android:viewportHeight="300">
+
+    <!-- Latar Belakang Hitam Pekat murni -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M0,0h300v300h-300z" />
+
+    <!-- Garis Bingkai Dalam (Border) Khas Poster Swiss Punk -->
+    <path
+        android:strokeColor="@color/border_color"
+        android:strokeWidth="4dp"
+        android:strokeLineJoin="miter"
+        android:pathData="M15,15 H285 V285 H15 Z" />
+
+    <!-- Aksen Garis Silang Sudut Teknis (Industrial Detail) -->
+    <path android:strokeColor="@color/border_color" android:strokeWidth="2dp" android:pathData="M15,15 L30,30" />
+    <path android:strokeColor="@color/border_color" android:strokeWidth="2dp" android:pathData="M285,15 L270,30" />
+    <path android:strokeColor="@color/border_color" android:strokeWidth="2dp" android:pathData="M15,285 L30,270" />
+    <path android:strokeColor="@color/border_color" android:strokeWidth="2dp" android:pathData="M285,285 L270,270" />
+
+    <!-- Simbol Not Balok Kotak Kaku di Tengah (Warna Kuning Isyarat Noctune) -->
+    <!-- Tiang & Bendera Musik Siku-Siku 90 Derajat -->
+    <path
+        android:fillColor="@color/brand_yellow"
+        android:pathData="M165,95 H205 V115 H165 Z" />
+
+    <path
+        android:fillColor="@color/brand_yellow"
+        android:pathData="M155,95 H165 V185 H155 Z" />
+
+    <path
+        android:fillColor="@color/brand_yellow"
+        android:pathData="M195,110 H205 V170 H195 Z" />
+
+    <!-- Kepala Not Ganda Berbentuk Persegi Panjang Pejal -->
+    <path
+        android:fillColor="@color/brand_yellow"
+        android:pathData="M115,170 H165 V200 H115 Z" />
+
+    <path
+        android:fillColor="@color/brand_yellow"
+        android:pathData="M155,155 H205 V185 H155 Z" />
+
+    <!-- Label Teknis Tambahan di Bagian Bawah Cover -->
+    <path
+        android:fillColor="#33FFFFFF"
+        android:pathData="M100,240 h100 v3 h-100 z" />
+
+</vector>

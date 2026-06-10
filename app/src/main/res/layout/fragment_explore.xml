@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/bg_main"
     android:padding="16dp">
 
-    <!-- Header -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,6 @@
         android:fontFamily="@font/bebas_neue"
         android:letterSpacing="0.02"/>
 
-    <!-- Genre chips horizontal scroll -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,10 +30,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gap="8dp"/>
-
     </HorizontalScrollView>
 
-    <!-- Label hasil -->
     <TextView
         android:id="@+id/tv_explore_label"
         android:layout_width="wrap_content"
@@ -46,24 +43,21 @@
         android:fontFamily="@font/bebas_neue"
         android:letterSpacing="0.01"/>
 
-    <!-- RecyclerView hasil explore -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_explore"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <!-- Tombol retry -->
     <Button
         android:id="@+id/btn_retry_explore"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:text="RETRY CONNECTION"
-        android:backgroundTint="@color/brand_yellow"
+        android:background="@drawable/brutalist_button_selector"
         android:textColor="#000000"
         android:fontFamily="@font/space_mono"
         android:textStyle="bold"
         android:visibility="gone"
         app:cornerRadius="0dp"/>
-
 </LinearLayout>

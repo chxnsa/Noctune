@@ -2,10 +2,11 @@
 <resources>
     <color name="bg_main">#F9F9F9</color>
     <color name="bg_surface">#FFFFFF</color>
-    <color name="text_primary">#000000</color>
-    <color name="text_secondary">#4C4546</color>
     <color name="border_color">#000000</color>
+    <color name="text_primary">#000000</color>
+    <color name="text_secondary">#666666</color>
     <color name="brand_yellow">#FFD600</color>
     <color name="brand_red">#E63329</color>
-    <color name="brand_green">#2D6A4F</color>
+    <color name="container_low">#FFFFFF</color>
+    <color name="overlay_dark">#99000000</color>
 </resources>

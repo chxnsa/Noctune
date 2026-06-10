@@ -9,7 +9,6 @@
     android:layout_marginBottom="8dp"
     android:gravity="center_vertical">
 
-    <!-- 1. TRACK INDEX READOUT (Nomor Ranking) -->
     <TextView
         android:id="@+id/tv_rank"
         android:layout_width="36dp"
@@ -21,14 +20,12 @@
         android:fontFamily="@font/space_mono"
         android:layout_gravity="center_vertical"/>
 
-    <!-- Pemisah Grid Antara Nomor dan Gambar (Aksen Mesin Analog) -->
     <View
         android:layout_width="2dp"
         android:layout_height="32dp"
         android:background="@color/border_color"
         android:layout_marginEnd="12dp"/>
 
-    <!-- 2. TRACK THUMBNAIL -->
     <ImageView
         android:id="@+id/iv_chart_image"
         android:layout_width="56dp"
@@ -36,7 +33,6 @@
         android:scaleType="centerCrop"
         android:background="@color/border_color"/>
 
-    <!-- 3. AUDIO PARAMETERS (Info Lagu & Statistik) -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -45,7 +41,6 @@
         android:layout_marginStart="14dp"
         android:gravity="center_vertical">
 
-        <!-- Judul Track (Sekarang pakai font Chivo yang super bersih dan estetik!) -->
         <TextView
             android:id="@+id/tv_chart_track_name"
             android:layout_width="match_parent"
@@ -58,7 +53,6 @@
             android:ellipsize="end"
             android:letterSpacing="0.01"/>
 
-        <!-- Nama Artis -->
         <TextView
             android:id="@+id/tv_chart_artist_name"
             android:layout_width="match_parent"
@@ -69,7 +63,6 @@
             android:maxLines="1"
             android:ellipsize="end"/>
 
-        <!-- Telemetry Data (Playcount dengan gaya Micro-Badge digital) -->
         <TextView
             android:id="@+id/tv_chart_playcount"
             android:layout_width="wrap_content"
@@ -79,18 +72,15 @@
             android:fontFamily="@font/space_mono"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
-            android:background="#161616"
+            android:background="@color/border_color"
             android:paddingHorizontal="6dp"
             android:paddingVertical="2dp"/>
-
     </LinearLayout>
 
-    <!-- Aksen Minimalis Sisi Kanan (Penyeimbang Grid) -->
     <View
         android:layout_width="2dp"
         android:layout_height="20dp"
         android:background="@color/border_color"
         android:alpha="0.4"
         android:layout_marginStart="8dp"/>
-
 </LinearLayout>

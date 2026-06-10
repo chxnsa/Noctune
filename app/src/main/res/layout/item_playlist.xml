@@ -5,17 +5,20 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="#FFFFFF"
-    android:layout_marginBottom="3dp"> <TextView
-    android:layout_width="44dp"
-    android:layout_height="44dp"
-    android:text="♫"
-    android:textColor="#000000"
-    android:textSize="22sp"
-    android:gravity="center"
-    android:background="#FFD600"
-    android:layout_gravity="center_vertical"
-    android:textStyle="bold"/>
+    android:background="@drawable/brutalist_flat_card"
+    android:layout_marginBottom="10dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:text="♫"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:background="@color/brand_yellow"
+        android:layout_gravity="center_vertical"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -29,19 +32,20 @@
             android:id="@+id/tv_playlist_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:fontFamily="@font/space_mono" /> <TextView
-        android:id="@+id/tv_track_count"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#4C4546"
-        android:textSize="11sp"
-        android:fontFamily="@font/space_mono"
-        android:text="00 TRACKS REGISTERED"
-        android:layout_marginTop="2dp"/>
+            android:fontFamily="@font/space_mono" />
 
+        <TextView
+            android:id="@+id/tv_track_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp"
+            android:fontFamily="@font/space_mono"
+            android:text="00 TRACKS REGISTERED"
+            android:layout_marginTop="2dp"/>
     </LinearLayout>
 
     <TextView
@@ -51,10 +55,12 @@
         android:layout_gravity="center_vertical"
         android:text="✕"
         android:textColor="#FFFFFF"
-        android:background="#E63329"
+        android:background="@color/brand_red"
         android:textSize="14sp"
         android:gravity="center"
         android:textStyle="bold"
-        android:fontFamily="@font/space_mono"/>
+        android:fontFamily="@font/space_mono"
+        android:clickable="true"
+        android:focusable="true"/>
 
 </LinearLayout>

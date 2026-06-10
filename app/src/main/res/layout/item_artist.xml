@@ -9,7 +9,6 @@
     android:layout_marginBottom="10dp"
     android:gravity="center_vertical">
 
-    <!-- Foto Artis (Tetap mengunci ID asli) -->
     <ImageView
         android:id="@+id/iv_artist_image"
         android:layout_width="56dp"
@@ -17,7 +16,6 @@
         android:scaleType="centerCrop"
         android:background="@color/border_color"/>
 
-    <!-- Detail Teks (Typo layout_MilemarginStart sudah diperbaiki ke layout_marginStart) -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,8 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:textColor="#FFFFFF"
-            android:textSize="10sp"
+            android:textColor="@color/bg_surface"
             android:background="@color/border_color"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
@@ -50,11 +47,9 @@
             android:textStyle="bold"/>
     </LinearLayout>
 
-    <!-- Block Accent Minimalis Khas Jalur Peta Kontemporer -->
     <View
         android:layout_width="4dp"
         android:layout_height="36dp"
         android:background="@color/brand_red"
         android:layout_marginEnd="4dp"/>
-
 </LinearLayout>

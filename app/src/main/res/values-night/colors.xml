@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_main">#0D0D0D</color>
-    <color name="bg_surface">#1A1A1A</color>
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#DADADA</color>
+    <color name="bg_main">#000000</color>
+    <color name="bg_surface">#121212</color>
     <color name="border_color">#FFFFFF</color>
-    <color name="brand_yellow">#FFD600</color>
-    <color name="brand_red">#E63329</color>
-    <color name="brand_green">#40916C</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#999999</color>
+    <color name="brand_yellow">#FFD600</color> <!-- Kuning tetap menyala sebagai aksen industrial -->
+    <color name="brand_red">#FF4D4D</color>    <!-- Merah disesuaikan agar lebih ramah OLED -->
+    <color name="container_low">#1B1B1B</color> <!-- Blok kontainer rendah gelap -->
+    <color name="overlay_dark">#B3000000</color>
 </resources>

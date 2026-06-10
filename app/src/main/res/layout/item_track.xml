@@ -7,7 +7,7 @@
     android:padding="16dp"
     android:background="@color/bg_surface"
     android:gravity="center_vertical"
-    style="@style/Widget.AppCompat.Light.ActionBar.Solid">
+    android:layout_marginBottom="4dp">
 
     <!-- Nomor Urut Track Ledger -->
     <TextView
@@ -47,9 +47,9 @@
             android:layout_marginTop="2dp"/>
     </LinearLayout>
 
-    <!-- Durasi lagu di sebelah kanan -->
+    <!-- Durasi lagu di sebelah kanan (Sudah disesuaikan ID-nya menjadi duration) -->
     <TextView
-        android:id="@+id/tv_playcount"
+        android:id="@+id/tv_track_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="3:39"
@@ -59,14 +59,5 @@
         android:textStyle="bold"
         android:layout_marginEnd="16dp"/>
 
-    <!-- Representasi Simbol Play Menggunakan Text Teknis -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PLAY"
-        android:textColor="@color/brand_green"
-        android:textSize="12sp"
-        android:fontFamily="@font/space_mono"
-        android:textStyle="bold"/>
 
 </LinearLayout>
