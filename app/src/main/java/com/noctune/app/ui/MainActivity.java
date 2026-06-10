@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.noctune.app.R;
+import com.noctune.app.ui.ChartsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new ExploreFragment();
             } else if (id == R.id.nav_faves) {
                 selectedFragment = new FavesFragment();
-            } else if (id == R.id.nav_radio) {
-                selectedFragment = new RadioFragment();
+            } else if (id == R.id.nav_charts) {
+                selectedFragment = new ChartsFragment();
             }
 
             return loadFragment(selectedFragment);

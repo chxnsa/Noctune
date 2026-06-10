@@ -17,8 +17,8 @@
         android:title="FAVES"/>
 
     <item
-        android:id="@+id/nav_radio"
-        android:icon="@android:drawable/ic_menu_agenda"
-        android:title="RADIO"/>
+        android:id="@+id/nav_charts"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="CHARTS"/>
 
 </menu>

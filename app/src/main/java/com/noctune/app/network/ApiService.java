@@ -23,4 +23,12 @@ public interface ApiService {
             @Query("api_key") String apiKey,
             @Query("limit") int limit
     );
+
+    // Chart by country
+    @GET("?method=geo.gettoptracks&format=json")
+    Call<TopTracksResponse> getTracksByCountry(
+            @Query("country") String country,
+            @Query("api_key") String apiKey,
+            @Query("limit") int limit
+    );
 }
