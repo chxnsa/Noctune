@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base theme (Tema Dasar Noctune) -->
-    <style name="Theme.Noctune" parent="Theme.MaterialComponents.NoActionBar">
-        <!-- Menggunakan token warna kustom kamu -->
+    <style name="Theme.Noctune" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/brand_yellow</item>
+        <item name="colorPrimaryVariant">@color/brand_yellow</item>
+        <item name="colorOnPrimary">#000000</item>  <!-- tambahkan ini -->
         <item name="colorSecondary">@color/brand_red</item>
+
+        <item name="android:windowBackground">@color/bg_main</item>
+        <item name="android:statusBarColor">@color/brand_yellow</item>
+
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:clipToPadding">false</item>
     </style>
 
-    <!-- Dark Theme (Otomatis aktif saat HP Mode Gelap) -->
-    <style name="Theme.Noctune.Dark" parent="Theme.Noctune">
-        <!-- Mengambil warna dari colors.xml (night) secara otomatis -->
-        <item name="android:windowBackground">@color/bg_main</item>
-        <item name="android:statusBarColor">@color/bg_main</item>
-    </style>
-
-    <!-- Light Theme (Otomatis aktif saat HP Mode Terang) -->
-    <style name="Theme.Noctune.Light" parent="Theme.Noctune">
-        <!-- Mengambil warna dari colors.xml standar secara otomatis -->
-        <item name="android:windowBackground">@color/bg_main</item>
-        <item name="android:statusBarColor">@color/brand_yellow</item>
-    </style>
-
-    <!-- Gaya Tombol Brutalist: Kotak total, border tebal, tanpa shadow halus -->
     <style name="BrutalistButton" parent="Widget.MaterialComponents.Button">
         <item name="cornerRadius">0dp</item>
         <item name="strokeColor">@color/border_color</item>

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.noctune.app.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -14,10 +16,11 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         // Apply dark/light theme sebelum setContentView
         applyTheme();
+        super.onCreate(savedInstanceState);
+
 
         setContentView(R.layout.activity_splash);
 
@@ -39,15 +42,11 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void applyTheme() {
-        // Baca preferensi tema dari SharedPreferences
-        // Sesuai materi SharedPreferences di modul
         SharedPreferences prefs = getSharedPreferences("noctune_prefs", MODE_PRIVATE);
-        boolean isDarkMode = prefs.getBoolean("dark_mode", true); // default dark
+        boolean isDarkMode = prefs.getBoolean("dark_mode", true);
 
-        if (isDarkMode) {
-            setTheme(R.style.Theme_Noctune_Dark);
-        } else {
-            setTheme(R.style.Theme_Noctune_Light);
-        }
+        AppCompatDelegate.setDefaultNightMode(
+                isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
     }
 }

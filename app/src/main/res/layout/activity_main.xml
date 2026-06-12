@@ -121,8 +121,8 @@
         android:background="@color/bg_surface"
         app:elevation="0dp"
         app:itemRippleColor="@null"
-        app:itemTextColor="@color/text_primary"
-        app:itemIconTint="@color/text_primary"
+        app:itemTextColor="@drawable/bottom_nav_selector"
+        app:itemIconTint="@drawable/bottom_nav_selector"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu"/>
 

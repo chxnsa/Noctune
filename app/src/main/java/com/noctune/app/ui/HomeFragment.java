@@ -3,10 +3,13 @@ package com.noctune.app.ui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.adapter.TrackAdapter;
 import com.noctune.app.model.TopTracksResponse;
+import com.noctune.app.model.Track;
 import com.noctune.app.network.ApiService;
 import com.noctune.app.network.RetrofitClient;
 import com.noctune.app.utils.Constants;
 import com.noctune.app.utils.NetworkUtils;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
@@ -31,7 +37,11 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvTracks;
     private TrackAdapter trackAdapter;
     private Button btnRetry;
+    private EditText etSearch;
     private ApiService apiService;
+
+    // Simpan semua track dari API — untuk filter search
+    private List<Track> allTracks = new ArrayList<>();
 
     @Nullable
     @Override
@@ -45,45 +55,87 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Init views — sesuai modul (view.findViewById di Fragment)
         rvTracks = view.findViewById(R.id.rv_tracks);
         btnRetry = view.findViewById(R.id.btn_retry);
+        etSearch = view.findViewById(R.id.et_search);
 
-        // Setup RecyclerView — sesuai modul
         rvTracks.setLayoutManager(new LinearLayoutManager(getActivity()));
         trackAdapter = new TrackAdapter(getActivity());
         rvTracks.setAdapter(trackAdapter);
 
-        // Init Retrofit — sesuai modul
         apiService = RetrofitClient.getClient().create(ApiService.class);
 
-        // Tombol retry — syarat tugas
         btnRetry.setOnClickListener(v -> loadTracks());
 
-        // Load data pertama kali
+        // Search realtime dengan TextWatcher
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                filterTracks(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         loadTracks();
     }
 
+    private void filterTracks(String query) {
+        if (allTracks.isEmpty()) return;
+
+        if (query.isEmpty()) {
+            // Kosong → tampilkan semua
+            trackAdapter.setTracks(allTracks);
+            return;
+        }
+
+        // Filter berdasarkan nama track atau nama artis
+        List<Track> filtered = new ArrayList<>();
+        String lowerQuery = query.toLowerCase().trim();
+
+        for (Track track : allTracks) {
+            boolean matchTrack = track.getName() != null &&
+                    track.getName().toLowerCase().contains(lowerQuery);
+
+            boolean matchArtist = track.getArtist() != null &&
+                    track.getArtist().getName() != null &&
+                    track.getArtist().getName().toLowerCase().contains(lowerQuery);
+
+            if (matchTrack || matchArtist) {
+                filtered.add(track);
+            }
+        }
+
+        trackAdapter.setTracks(filtered);
+
+        // Kasih feedback kalau tidak ada hasil
+        if (filtered.isEmpty()) {
+            Toast.makeText(getActivity(),
+                    "No results for \"" + query + "\"",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void loadTracks() {
-        // Cek koneksi internet dulu
         if (!NetworkUtils.isConnected(getActivity())) {
-            // Tidak ada internet — tampilkan tombol retry
             btnRetry.setVisibility(View.VISIBLE);
             Toast.makeText(getActivity(),
                     "No internet connection", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Ada internet — sembunyikan retry
         btnRetry.setVisibility(View.GONE);
 
-        // Pakai Executor untuk background thread — sesuai syarat tugas
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
-            // Jalankan API call di background thread
-            // Sesuai pola modul networking — call.enqueue
             Call<TopTracksResponse> call = apiService.getTopTracks(
                     Constants.API_KEY, 1, 50
             );
@@ -94,10 +146,18 @@ public class HomeFragment extends Fragment {
                                        @NonNull Response<TopTracksResponse> response) {
                     handler.post(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            // Berhasil — update RecyclerView di main thread
-                            trackAdapter.setTracks(
-                                    response.body().getTracks().getTrack()
-                            );
+                            // Simpan ke allTracks untuk keperluan filter
+                            allTracks = response.body().getTracks().getTrack();
+                            trackAdapter.setTracks(allTracks);
+
+                            // Kalau ada teks search aktif, filter ulang
+                            if (etSearch != null) {
+                                String currentQuery = etSearch.getText()
+                                        .toString().trim();
+                                if (!currentQuery.isEmpty()) {
+                                    filterTracks(currentQuery);
+                                }
+                            }
                         } else {
                             Toast.makeText(getActivity(),
                                     "Failed to load data",

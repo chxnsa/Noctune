@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@android:drawable/ic_menu_compass"
+        android:icon="@drawable/ic_nav_home"
         android:title="HOME"/>
 
     <item
         android:id="@+id/nav_explore"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_nav_explore"
         android:title="EXPLORE"/>
 
     <item
@@ -18,7 +18,7 @@
 
     <item
         android:id="@+id/nav_charts"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@drawable/ic_nav_charts"
         android:title="CHARTS"/>
 
 </menu>

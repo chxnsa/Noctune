@@ -46,36 +46,6 @@
                 android:fontFamily="@font/space_mono"
                 android:textStyle="bold"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/tv_back"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/brand_yellow"
-                    android:text=" GENRE: "
-                    android:textColor="#000000"
-                    android:textSize="11sp"
-                    android:paddingHorizontal="6dp"
-                    android:paddingVertical="2dp"
-                    android:fontFamily="@font/space_mono"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="KRAUTROCK"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/bebas_neue"/>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

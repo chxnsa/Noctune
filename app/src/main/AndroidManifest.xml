@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:theme="@style/Theme.Noctune.Dark">
+        android:theme="@style/Theme.Noctune">
 
         <!-- Splash sebagai Launcher -->
         <activity android:name=".ui.SplashActivity"

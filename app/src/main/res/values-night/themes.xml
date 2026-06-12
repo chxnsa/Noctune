@@ -1,8 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Noctune" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">#FFD600</item>
-        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorPrimary">@color/brand_yellow</item>
+        <item name="colorPrimaryVariant">@color/brand_yellow</item>  <!-- jangan #000000 -->
         <item name="colorOnPrimary">#000000</item>
-        <item name="android:windowBackground">#0D0D0D</item>
+        <item name="colorSecondary">@color/brand_red</item>
+
+        <item name="android:windowBackground">@color/bg_main</item>
+        <item name="android:statusBarColor">@color/bg_main</item>
+
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:clipToPadding">false</item>
     </style>
 </resources>
