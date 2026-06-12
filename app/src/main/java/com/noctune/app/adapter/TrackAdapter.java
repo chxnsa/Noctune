@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.model.Track;
 import com.noctune.app.ui.DetailActivity;
+import com.noctune.app.utils.ImageLoader;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,27 +75,16 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
 
             tvPlaycount.setText(formatCount(track.getPlaycount()) + " PLAYS");
 
-            // Load gambar
-            String imageUrl = track.getImageUrl();
 
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                // Last.fm punya gambar valid
-                Picasso.get()
-                        .load(imageUrl)
-                        .placeholder(R.drawable.sample_album)
-                        .error(R.drawable.sample_album)
-                        .into(ivImage);
-            } else {
-                // Fallback — generate warna solid dari nama artis
-                // Supaya tidak kosong polos
-                ivImage.setImageResource(R.drawable.sample_album);
+            String artistName = track.getArtist() != null ?
+                    track.getArtist().getName() : "";
 
-                // Beri background warna berbeda per track
-                int[] colors = {0xFFE63329, 0xFFFFD600, 0xFF2D6A4F,
-                        0xFF1565C0, 0xFF9C27B0, 0xFFFF6B35};
-                int colorIndex = Math.abs(track.getName().hashCode()) % colors.length;
-                ivImage.setBackgroundColor(colors[colorIndex]);
-            }
+            ImageLoader.loadTrackImage(
+                    ivImage,
+                    track.getImageUrl(),
+                    track.getName(),
+                    artistName
+            );
 
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, DetailActivity.class);

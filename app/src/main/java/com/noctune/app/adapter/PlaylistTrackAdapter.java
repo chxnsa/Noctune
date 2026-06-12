@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
@@ -86,6 +87,7 @@ public class PlaylistTrackAdapter extends
             }
 
             // Klik item → konversi ke Track lalu buka DetailActivity
+            // Fix No.8 — sebelumnya tidak ada listener sama sekali
             itemView.setOnClickListener(v -> {
                 Track detailTrack = convertToTrack(track);
 
@@ -94,24 +96,20 @@ public class PlaylistTrackAdapter extends
                 activity.startActivity(intent);
             });
 
-            // Hapus dari playlist dengan konfirmasi
+            // Hapus dari playlist
             tvRemove.setOnClickListener(v -> {
-                ToastHelper.showConfirmDialog(activity, "REMOVE TRACK FROM PLAYLIST?", () -> {
-                    MusicHelper helper = MusicHelper.getInstance(
-                            activity.getApplicationContext());
-                    helper.open();
-                    helper.deleteTrackFromPlaylist(String.valueOf(track.getId()));
-                    helper.close();
+                MusicHelper helper = MusicHelper.getInstance(
+                        activity.getApplicationContext());
+                helper.open();
+                helper.deleteTrackFromPlaylist(String.valueOf(track.getId()));
+                helper.close();
 
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION) {
-                        tracks.remove(pos);
-                        notifyItemRemoved(pos);
-                        ToastHelper.showSuccess(activity, "TRACK REMOVED FROM PLAYLIST");
-                    }
+                tracks.remove(getAdapterPosition());
+                notifyItemRemoved(getAdapterPosition());
+                ToastHelper.showError(activity, "[SYSTEM_LOG: TRACK_EJECTED_FROM_CONTAINER]");
 
-                    if (listener != null) listener.onTrackRemoved();
-                });
+
+                if (listener != null) listener.onTrackRemoved();
             });
         }
 

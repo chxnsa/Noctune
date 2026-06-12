@@ -70,7 +70,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_explore_artists"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingStart="16dp"
                 android:clipToPadding="false"/>

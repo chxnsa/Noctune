@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 public class MusicHelper {
 
@@ -19,36 +20,33 @@ public class MusicHelper {
 
     public static MusicHelper getInstance(Context context) {
         if (INSTANCE == null) {
-            synchronized (MusicHelper.class) {
+            synchronized (SQLiteOpenHelper.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new MusicHelper(context.getApplicationContext());
+                    INSTANCE = new MusicHelper(context);
                 }
             }
         }
         return INSTANCE;
     }
 
-    public synchronized void open() throws SQLException {
-        if (database == null || !database.isOpen()) {
-            database = databaseHelper.getWritableDatabase();
-        }
+    public void open() throws SQLException {
+        database = databaseHelper.getWritableDatabase();
     }
 
     public void close() {
-        // Jangan menutup database secara eksplisit di sini karena MusicHelper adalah Singleton.
-        // Menutupnya akan menyebabkan crash (IllegalStateException) pada thread latar belakang
-        // saat terjadi perubahan konfigurasi (seperti ganti mode Dark/Light).
+        databaseHelper.close();
+        if (database.isOpen()) {
+            database.close();
+        }
     }
 
     // Insert favorit baru
     public long insert(ContentValues values) {
-        open();
         return database.insert(DATABASE_TABLE, null, values);
     }
 
     // Hapus favorit by id
     public int deleteById(String id) {
-        open();
         return database.delete(DATABASE_TABLE,
                 DatabaseContract.FavColumns._ID + " = ?",
                 new String[]{id});
@@ -56,13 +54,11 @@ public class MusicHelper {
 
     // Buat playlist baru
     public long insertPlaylist(ContentValues values) {
-        open();
         return database.insert(DatabaseContract.TABLE_PLAYLIST, null, values);
     }
 
     // Ambil semua playlist
     public Cursor queryAllPlaylists() {
-        open();
         return database.query(
                 DatabaseContract.TABLE_PLAYLIST,
                 null, null, null, null, null,
@@ -72,7 +68,6 @@ public class MusicHelper {
 
     // Hapus playlist by id
     public int deletePlaylist(String id) {
-        open();
         // Hapus semua track dalam playlist dulu
         database.delete(
                 DatabaseContract.TABLE_PLAYLIST_TRACKS,
@@ -89,14 +84,12 @@ public class MusicHelper {
 
     // Tambah track ke playlist
     public long insertTrackToPlaylist(ContentValues values) {
-        open();
         return database.insert(
                 DatabaseContract.TABLE_PLAYLIST_TRACKS, null, values);
     }
 
     // Ambil semua track dalam playlist
     public Cursor queryTracksByPlaylist(String playlistId) {
-        open();
         return database.query(
                 DatabaseContract.TABLE_PLAYLIST_TRACKS,
                 null,
@@ -109,7 +102,6 @@ public class MusicHelper {
 
     // Hapus track dari playlist
     public int deleteTrackFromPlaylist(String trackId) {
-        open();
         return database.delete(
                 DatabaseContract.TABLE_PLAYLIST_TRACKS,
                 DatabaseContract.PlaylistTrackColumns._ID + " = ?",
@@ -119,7 +111,6 @@ public class MusicHelper {
 
     // Hitung jumlah track dalam playlist
     public int countTracksInPlaylist(String playlistId) {
-        open();
         Cursor cursor = database.query(
                 DatabaseContract.TABLE_PLAYLIST_TRACKS,
                 null,
@@ -127,17 +118,13 @@ public class MusicHelper {
                 new String[]{playlistId},
                 null, null, null
         );
-        int count = 0;
-        if (cursor != null) {
-            count = cursor.getCount();
-            cursor.close();
-        }
+        int count = cursor.getCount();
+        cursor.close();
         return count;
     }
 
     // Ambil semua favorit
     public Cursor queryAll() {
-        open();
         return database.query(
                 DATABASE_TABLE,
                 null, null, null, null, null,
@@ -147,7 +134,6 @@ public class MusicHelper {
 
     // Cek apakah track sudah di favorit
     public boolean isFavorite(String trackName, String artistName) {
-        open();
         Cursor cursor = database.query(
                 DATABASE_TABLE,
                 null,
@@ -156,16 +142,12 @@ public class MusicHelper {
                 new String[]{trackName, artistName},
                 null, null, null
         );
-        boolean exists = false;
-        if (cursor != null) {
-            exists = cursor.getCount() > 0;
-            cursor.close();
-        }
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
         return exists;
     }
 
     public boolean isTrackInPlaylist(String playlistId, String trackName, String artistName) {
-        open();
         String table = DatabaseContract.TABLE_PLAYLIST_TRACKS;
 
         String selection = DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID + " = ? AND " +
@@ -174,11 +156,8 @@ public class MusicHelper {
         String[] selectionArgs = {playlistId, trackName, artistName};
 
         Cursor cursor = database.query(table, null, selection, selectionArgs, null, null, null);
-        boolean exists = false;
-        if (cursor != null) {
-            exists = cursor.getCount() > 0;
-            cursor.close();
-        }
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
         return exists;
     }
 }

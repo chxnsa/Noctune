@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- NEW HERO BLOCK: Full Background Poster Style -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:background="@color/border_color">
+
+            <!-- Foto artis memenuhi layar belakang dengan scaleType centerCrop -->
+            <ImageView
+                android:id="@+id/iv_artist_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:alpha="0.65" />
+
+            <!-- Lapisan gradasi/tint tipis bagian bawah agar teks nama terbaca -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/overlay_dark" />
+
+
+            <!-- Tombol Kembali dengan Gaya Label Kaset -->
+            <TextView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="16dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="← BACK"
+                android:textColor="#000000"
+                android:background="@color/brand_yellow"
+                android:textStyle="bold"
+                android:fontFamily="@font/space_mono"
+                android:textSize="11sp"
+                android:letterSpacing="0.05"/>
+
+            <!-- Nama Artis Raksasa di Sisi Kiri Bawah -->
+            <TextView
+                android:id="@+id/tv_artist_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/brand_yellow"
+                android:textSize="42sp"
+                android:fontFamily="@font/bebas_neue"
+                android:letterSpacing="0.02"/>
+
+        </RelativeLayout>
+
+        <!-- Garis Pemisah Tebal Sinyal Kuning -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/brand_yellow"/>
+
+        <!-- STATS BLOCK: Diubah Menjadi Komponen Grid Konsol Besi -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/bg_surface"
+            android:paddingVertical="14dp">
+
+            <!-- Kolom Listeners -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_listeners"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0,000,000"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/space_mono" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="MONTHLY LISTENERS"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="9sp"
+                    android:fontFamily="@font/space_mono"
+                    android:letterSpacing="0.03"/>
+
+            </LinearLayout>
+
+            <!-- Garis Batas Kaku Antar Kolom -->
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/border_color"/>
+
+            <!-- Kolom Total Plays -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_playcount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0,000,000"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/space_mono"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="TOTAL PLAY COUNT"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="9sp"
+                    android:fontFamily="@font/space_mono"
+                    android:letterSpacing="0.03"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Garis Pemisah Tipis -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/border_color"/>
+
+        <!-- BIOGRAPHY SECTION -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@color/bg_main">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ARTIST BIO"
+                android:textColor="@color/text"
+                android:textSize="11sp"
+                android:fontFamily="@font/space_mono"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading biography data from directory database index..."
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:lineSpacingMultiplier="1.4"
+                android:fontFamily="@font/space_mono"/>
+        </LinearLayout>
+
+        <!-- Garis Pemisah Menuju Musik -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/border_color"/>
+
+        <!-- HEADER TOP TRACKS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:background="@color/bg_surface">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="14dp"
+                android:background="@color/brand_yellow"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOP TRACKS"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/space_mono"
+                android:letterSpacing="0.02"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_color"/>
+
+        <!-- LIST TRACKS RECYCLERVIEW -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_artist_tracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="12dp"
+            android:background="@color/bg_main"/>
+
+
+
+    </LinearLayout>
+
+
+</ScrollView>

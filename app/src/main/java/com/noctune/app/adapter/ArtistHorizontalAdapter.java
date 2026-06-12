@@ -1,6 +1,7 @@
 package com.noctune.app.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.model.Artist;
+import com.noctune.app.utils.ImageLoader;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
+import com.noctune.app.ui.ArtistDetailActivity;
 
 public class ArtistHorizontalAdapter extends
         RecyclerView.Adapter<ArtistHorizontalAdapter.ViewHolder> {
@@ -60,21 +63,18 @@ public class ArtistHorizontalAdapter extends
         void bind(Artist artist) {
             tvName.setText(artist.getName());
 
-            String imageUrl = artist.getImageUrl();
-            if (imageUrl != null && !imageUrl.isEmpty()
-                    && !imageUrl.contains("2a96cbd8b46e442fc41c2b86b821562f")) {
-                Picasso.get()
-                        .load(imageUrl)
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .into(ivImage);
-            } else {
-                // Fallback warna solid per artist
-                int[] colors = {0xFFE63329, 0xFFFFD600, 0xFF2D6A4F,
-                        0xFF1565C0, 0xFF9C27B0, 0xFFFF6B35};
-                int colorIndex = Math.abs(artist.getName().hashCode()) % colors.length;
-                ivImage.setImageResource(R.drawable.ic_launcher_background);
-                ivImage.setBackgroundColor(colors[colorIndex]);
-            }
+            ImageLoader.loadArtistImage(
+                    ivImage,
+                    artist.getImageUrl(),
+                    artist.getName()
+            );
+
+            // Klik artist → ArtistDetailActivity (untuk fix No.3)
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ArtistDetailActivity.class);
+                intent.putExtra("artist_name", artist.getName());
+                context.startActivity(intent);
+            });
         }
     }
 }

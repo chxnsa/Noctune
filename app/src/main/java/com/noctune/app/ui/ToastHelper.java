@@ -3,17 +3,11 @@ package com.noctune.app.ui;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import com.noctune.app.R;
 
 public class ToastHelper {
-
-    public interface OnConfirmListener {
-        void onConfirmed();
-    }
 
     // Fungsi global untuk Toast Normal (Warna Kuning Brand)
     public static void showSuccess(Context context, String message) {
@@ -45,35 +39,5 @@ public class ToastHelper {
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout); // Pasang view kustom di sini
         toast.show();
-    }
-
-    // Dialog Konfirmasi Global
-    public static void showConfirmDialog(Context context, String message, OnConfirmListener listener) {
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_confirm_delete, null);
-
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setView(dialogView)
-                .create();
-
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
-
-        TextView tvMessage = dialogView.findViewById(R.id.tv_confirm_message);
-        Button btnCancel = dialogView.findViewById(R.id.btn_cancel_delete);
-        Button btnConfirm = dialogView.findViewById(R.id.btn_confirm_delete);
-
-        tvMessage.setText(message.toUpperCase());
-
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-
-        btnConfirm.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onConfirmed();
-            }
-            dialog.dismiss();
-        });
-
-        dialog.show();
     }
 }

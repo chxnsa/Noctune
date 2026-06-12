@@ -87,6 +87,13 @@ public class DetailActivity extends AppCompatActivity {
 
             if (track.getArtist() != null) {
                 tvArtistName.setText(track.getArtist().getName());
+
+                // Klik Nama Artis -> Ke ArtistDetailActivity
+                tvArtistName.setOnClickListener(v -> {
+                    Intent intent = new Intent(DetailActivity.this, ArtistDetailActivity.class);
+                    intent.putExtra("artist_name", track.getArtist().getName());
+                    startActivity(intent);
+                });
             }
 
             tvListeners.setText(formatCount(track.getListeners()));

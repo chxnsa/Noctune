@@ -29,6 +29,10 @@
             android:name=".ui.PlaylistDetailActivity"
             android:exported="false"/>
 
+        <activity
+            android:name=".ui.ArtistDetailActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
