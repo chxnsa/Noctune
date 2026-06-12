@@ -30,5 +30,7 @@ public class DatabaseContract {
         public static String ARTIST_NAME = "artist_name";
         public static String DURATION = "duration";
         public static String IMAGE_URL = "image_url";
+        public static final String PLAYCOUNT = "playcount";
+        public static final String LISTENERS = "listeners";
     }
 }

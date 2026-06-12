@@ -52,14 +52,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             " %s TEXT NOT NULL," +
                             " %s TEXT NOT NULL," +
                             " %s TEXT," +
-                            " %s TEXT)",
+                            " %s TEXT," +
+                            " %s TEXT," +  // <-- TAMBAH %s UNTUK PLAYCOUNT
+                            " %s TEXT)",   // <-- TAMBAH %s UNTUK LISTENERS
                     DatabaseContract.TABLE_PLAYLIST_TRACKS,
                     DatabaseContract.PlaylistTrackColumns._ID,
                     DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID,
                     DatabaseContract.PlaylistTrackColumns.TRACK_NAME,
                     DatabaseContract.PlaylistTrackColumns.ARTIST_NAME,
                     DatabaseContract.PlaylistTrackColumns.DURATION,
-                    DatabaseContract.PlaylistTrackColumns.IMAGE_URL
+                    DatabaseContract.PlaylistTrackColumns.IMAGE_URL,
+                    // --- MASUKKAN DUA KOLOM BARU DI SINI ---
+                    DatabaseContract.PlaylistTrackColumns.PLAYCOUNT,
+                    DatabaseContract.PlaylistTrackColumns.LISTENERS
             );
 
     public DatabaseHelper(Context context) {

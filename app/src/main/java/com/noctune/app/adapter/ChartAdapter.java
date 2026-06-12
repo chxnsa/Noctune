@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.model.Track;
 import com.noctune.app.ui.DetailActivity;
-import com.squareup.picasso.Picasso;
+import com.noctune.app.utils.ImageLoader; // IMPORT UTENSIL IMAGELOADER KAMU
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,19 +73,26 @@ public class ChartAdapter extends RecyclerView.Adapter<ChartAdapter.ViewHolder> 
 
             tvTrackName.setText(track.getName());
 
+            String artistName = "";
             if (track.getArtist() != null) {
-                tvArtistName.setText(track.getArtist().getName());
+                artistName = track.getArtist().getName();
+                tvArtistName.setText(artistName);
+            } else {
+                tvArtistName.setText("Unknown Artist");
             }
 
             tvPlaycount.setText(formatCount(track.getPlaycount()) + " PLAYS");
 
-            String imageUrl = track.getImageUrl();
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                Picasso.get()
-                        .load(imageUrl)
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .into(ivImage);
-            }
+            // ==================== PERBAIKAN DI SINI ====================
+            // SEBELUMNYA: Menggunakan Picasso mentah yang rentan kosong
+            // Ganti dengan ImageLoader agar otomatis fallback ke iTunes API jika Last.fm kosong
+            ImageLoader.loadTrackImage(
+                    ivImage,
+                    track.getImageUrl(),
+                    track.getName(),
+                    artistName
+            );
+            // ===========================================================
 
             // Klik → DetailActivity
             itemView.setOnClickListener(v -> {

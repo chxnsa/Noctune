@@ -77,17 +77,17 @@ public class PlaylistTrackAdapter extends
             tvArtist.setText(track.getArtistName());
             tvDuration.setText(formatDuration(track.getDuration()));
 
-            if (track.getImageUrl() != null && !track.getImageUrl().isEmpty()) {
-                Picasso.get()
-                        .load(track.getImageUrl())
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .into(ivImage);
-            } else {
-                ivImage.setImageResource(R.drawable.ic_launcher_background);
-            }
+            // ==================== PERBAIKAN GAMBAR DI SINI ====================
+            // SEBELUMNYA: Memakai Picasso mentah
+            com.noctune.app.utils.ImageLoader.loadTrackImage(
+                    ivImage,
+                    track.getImageUrl(),
+                    track.getTrackName(),
+                    track.getArtistName()
+            );
+            // ==================================================================
 
             // Klik item → konversi ke Track lalu buka DetailActivity
-            // Fix No.8 — sebelumnya tidak ada listener sama sekali
             itemView.setOnClickListener(v -> {
                 Track detailTrack = convertToTrack(track);
 
@@ -96,32 +96,69 @@ public class PlaylistTrackAdapter extends
                 activity.startActivity(intent);
             });
 
-            // Hapus dari playlist
             tvRemove.setOnClickListener(v -> {
-                MusicHelper helper = MusicHelper.getInstance(
-                        activity.getApplicationContext());
-                helper.open();
-                helper.deleteTrackFromPlaylist(String.valueOf(track.getId()));
-                helper.close();
+                // Inflate layout dialog kustom brutalismu
+                View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_confirm_delete, null);
+                androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(activity)
+                        .setView(dialogView).create();
 
-                tracks.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-                ToastHelper.showError(activity, "[SYSTEM_LOG: TRACK_EJECTED_FROM_CONTAINER]");
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
 
+                TextView tvMessage = dialogView.findViewById(R.id.tv_confirm_message);
+                android.widget.Button btnCancel = dialogView.findViewById(R.id.btn_cancel_delete);
+                android.widget.Button btnConfirm = dialogView.findViewById(R.id.btn_confirm_delete);
 
-                if (listener != null) listener.onTrackRemoved();
+                // Set pesan kustom untuk playlist
+                tvMessage.setText("ARE YOU SURE YOU WANT TO REMOVE '" + track.getTrackName().toUpperCase() + "' FROM THIS PLAYLIST?");
+
+                // Jika CANCEL
+                btnCancel.setOnClickListener(vCancel -> dialog.dismiss());
+
+                // Jika REMOVE (Konfirmasi)
+                btnConfirm.setOnClickListener(vConfirm -> {
+                    MusicHelper helper = MusicHelper.getInstance(activity.getApplicationContext());
+                    helper.open();
+                    helper.deleteTrackFromPlaylist(String.valueOf(track.getId()));
+                    helper.close();
+
+                    int currentPosition = getAdapterPosition();
+                    if (currentPosition != RecyclerView.NO_POSITION) {
+                        tracks.remove(currentPosition);
+                        notifyItemRemoved(currentPosition);
+                        ToastHelper.showError(activity, "[TRACK REMOVED FROM PLAYLIST]");
+                    }
+
+                    if (listener != null) listener.onTrackRemoved();
+                    dialog.dismiss();
+                });
+
+                dialog.show();
             });
         }
 
         private Track convertToTrack(PlaylistTrack pt) {
+            String playcountVal = (pt.getPlaycount() != null) ? pt.getPlaycount() : "0";
+            String listenersVal = (pt.getListeners() != null) ? pt.getListeners() : "0";
+            String durationVal = (pt.getDuration() != null) ? pt.getDuration() : "0";
+            String imageUrlVal = (pt.getImageUrl() != null) ? pt.getImageUrl() : "";
+
+            // PERBAIKAN FATAL: Buat objek TrackArtist secara utuh agar DetailActivity
+            // tidak crash saat memanggil track.getArtist().getName()
+            TrackArtist artist = new TrackArtist(pt.getArtistName());
+
+            // Jika di model TrackArtist kamu ada field url/image, set default agar tidak null
+            // artist.setUrl("");
+
             return new Track(
                     pt.getTrackName(),
-                    pt.getDuration(),
-                    "0",                 // playcount tidak disimpan di playlist
-                    "0",                 // listeners tidak disimpan di playlist
-                    "",                  // url last.fm tidak disimpan
-                    new TrackArtist(pt.getArtistName()),
-                    pt.getImageUrl()
+                    durationVal,
+                    playcountVal,
+                    listenersVal,
+                    "", // url Last.fm dikosongkan tidak masalah
+                    artist,
+                    imageUrlVal
             );
         }
 

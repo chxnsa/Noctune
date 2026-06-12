@@ -277,7 +277,7 @@
                     android:text="+ ADD TO PLAYLIST"
                     android:background="@drawable/brutalist_button_selector"
                     app:backgroundTint="@null"
-                    android:textColor="@color/brand_yellow"
+                    android:textColor="@color/text"
                     android:textStyle="bold"
                     android:textSize="12sp"
                     android:fontFamily="@font/space_mono"

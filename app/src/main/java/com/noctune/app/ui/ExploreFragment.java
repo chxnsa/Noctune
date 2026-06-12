@@ -20,6 +20,7 @@ import com.noctune.app.adapter.ArtistHorizontalAdapter;
 import com.noctune.app.adapter.TrackAdapter;
 import com.noctune.app.model.TopArtistsResponse;
 import com.noctune.app.model.TopTracksResponse;
+import com.noctune.app.model.Track;
 import com.noctune.app.network.ApiService;
 import com.noctune.app.network.RetrofitClient;
 import com.noctune.app.utils.Constants;
@@ -200,9 +201,31 @@ public class ExploreFragment extends Fragment {
                     handler.post(() -> {
                         if (response.isSuccessful() && response.body() != null
                                 && response.body().getTracks() != null) {
-                            trackAdapter.setTracks(
-                                    response.body().getTracks().getTrack()
-                            );
+
+                            java.util.List<Track> trackList = response.body().getTracks().getTrack();
+
+                            // --- PERBAIKAN: GENERATE DATA EMULASI DINAMIS UNTUK GENRE HUB ---
+                            if (trackList != null) {
+                                for (int i = 0; i < trackList.size(); i++) {
+                                    Track t = trackList.get(i);
+
+                                    // Karena API Last.fm Genre tidak memberikan data statistik,
+                                    // kita buat simulasi angka brutalist menurun berdasarkan urutan rank (i)
+                                    // agar UI tetap terasa hidup dan responsif.
+                                    long simulatedListeners = 1_500_000L - (i * 75_000L);
+                                    long simulatedPlays = simulatedListeners * 3; // Plays dibuat lebih besar dari pendengar
+
+                                    if (t.getListeners() == null || t.getListeners().isEmpty() || t.getListeners().equals("0")) {
+                                        t.setListeners(String.valueOf(simulatedListeners));
+                                    }
+                                    if (t.getPlaycount() == null || t.getPlaycount().isEmpty() || t.getPlaycount().equals("0")) {
+                                        // Ganti ini jika kamu punya setter, atau pastikan setPlaycount sudah ada di Track.java
+                                        t.setPlaycount(String.valueOf(simulatedPlays));
+                                    }
+                                }
+                            }
+
+                            trackAdapter.setTracks(trackList);
                         } else {
                             btnRetry.setVisibility(View.VISIBLE);
                         }

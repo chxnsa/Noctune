@@ -31,7 +31,7 @@ public class ToastHelper {
         if (isError) {
             text.setTextColor(androidx.core.content.ContextCompat.getColor(context, R.color.brand_red));
         } else {
-            text.setTextColor(androidx.core.content.ContextCompat.getColor(context, R.color.brand_yellow));
+            text.setTextColor(androidx.core.content.ContextCompat.getColor(context, R.color.text));
         }
 
         // 4. Racik Toast bawaan Android menggunakan View kustom kita

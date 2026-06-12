@@ -101,23 +101,41 @@ public class FavesFragment extends Fragment {
     private void switchTab(boolean showFaves) {
         isFavesTab = showFaves;
 
+        // Ambil TextView secara paksa berdasarkan index anak ke-0 di dalam LinearLayout Tab
+        TextView tvTabFaves = (TextView) tabFaves.getChildAt(0);
+        TextView tvTabPlaylists = (TextView) tabPlaylists.getChildAt(0);
+
         if (showFaves) {
             viewFaves.setVisibility(View.VISIBLE);
             viewPlaylists.setVisibility(View.GONE);
-            // Mengikuti token warna adaptif
-            tabFaves.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.brand_yellow));
-            tabPlaylists.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.bg_surface));
+
+            // Set Background Tab
+            tabFaves.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.brand_yellow));
+            tabPlaylists.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.bg_surface));
+
+            // Set Warna Teks Tab (Aktif = Hitam, Tidak Aktif = Putih/Text Primary bawaan)
+            if (tvTabFaves != null) tvTabFaves.setTextColor(android.graphics.Color.BLACK);
+            if (tvTabPlaylists != null) tvTabPlaylists.setTextColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.text_primary));
+
+            loadFavorites();
         } else {
             viewFaves.setVisibility(View.GONE);
             viewPlaylists.setVisibility(View.VISIBLE);
-            tabFaves.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.bg_surface));
-            tabPlaylists.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.brand_yellow));
+
+            // Set Background Tab
+            tabFaves.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.bg_surface));
+            tabPlaylists.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.brand_yellow));
+
+            // Set Warna Teks Tab (Tidak Aktif = Putih/Text Primary bawaan, Aktif = Hitam)
+            if (tvTabFaves != null) tvTabFaves.setTextColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.text_primary));
+            if (tvTabPlaylists != null) tvTabPlaylists.setTextColor(android.graphics.Color.BLACK);
+
             loadPlaylists();
         }
     }
 
     private void showCreatePlaylistDialog() {
-        // 1. Inflate layout kustom kita
+        if (getActivity() == null) return;
         View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_playlist, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -125,27 +143,22 @@ public class FavesFragment extends Fragment {
 
         AlertDialog dialog = builder.create();
 
-        // 2. Hilangkan background bawaan android agar sudut kotak tajam kita kelihatan sempurna
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        // 3. Inisialisasi komponen di dalam layout kustom
         EditText etPlaylistName = dialogView.findViewById(R.id.et_playlist_name);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
         Button btnCreate = dialogView.findViewById(R.id.btn_create);
 
-        // 4. Aksi Tombol Batal
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
-        // 5. Aksi Tombol Eksekusi Pembuatan
         btnCreate.setOnClickListener(v -> {
             String name = etPlaylistName.getText().toString().trim();
             if (!name.isEmpty()) {
                 createPlaylist(name);
                 dialog.dismiss();
             } else {
-                // Memberi isyarat warna merah jika kosong
                 etPlaylistName.setHintTextColor(getResources().getColor(R.color.brand_red));
                 etPlaylistName.setHint("NAME_REQUIRED!");
             }
@@ -169,7 +182,11 @@ public class FavesFragment extends Fragment {
 
             musicHelper.insertPlaylist(values);
 
-            handler.post(() -> loadPlaylists());
+            handler.post(() -> {
+                if (isAdded()) { // Proteksi lifecycle fragment
+                    loadPlaylists();
+                }
+            });
         });
     }
 
@@ -182,9 +199,11 @@ public class FavesFragment extends Fragment {
             Cursor cursor = musicHelper.queryAll();
             ArrayList<FavoriteTrack> favorites =
                     MappingHelper.mapCursorToArrayList(cursor);
-            cursor.close();
+            if (cursor != null) cursor.close();
 
             handler.post(() -> {
+                if (!isAdded()) return; // Jika fragment sudah lepas, hentikan manipulasi UI
+
                 if (favorites.size() > 0) {
                     favesAdapter.setFavorites(favorites);
                     tvEmpty.setVisibility(View.GONE);
@@ -206,16 +225,17 @@ public class FavesFragment extends Fragment {
             Cursor cursor = musicHelper.queryAllPlaylists();
             ArrayList<Playlist> playlists =
                     MappingHelper.mapCursorToPlaylists(cursor);
-            cursor.close();
+            if (cursor != null) cursor.close();
 
             // Hitung jumlah track per playlist
             for (Playlist p : playlists) {
-                int count = musicHelper.countTracksInPlaylist(
-                        String.valueOf(p.getId()));
+                int count = musicHelper.countTracksInPlaylist(String.valueOf(p.getId()));
                 p.setTrackCount(count);
             }
 
             handler.post(() -> {
+                if (!isAdded()) return; // Proteksi crash ketiadaan konteks UI
+
                 if (playlists.size() > 0) {
                     playlistAdapter.setPlaylists(playlists);
                     tvEmptyPlaylist.setVisibility(View.GONE);
@@ -229,6 +249,7 @@ public class FavesFragment extends Fragment {
     }
 
     private void showConfirmDeleteDialog(String message, OnConfirmListener listener) {
+        if (getContext() == null) return;
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_delete, null);
 
         androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext())
@@ -244,21 +265,17 @@ public class FavesFragment extends Fragment {
         Button btnConfirm = dialogView.findViewById(R.id.btn_confirm_delete);
 
         tvMessage.setText(message.toUpperCase());
-
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
-        // Di sini fungsi listener tadi bekerja!
         btnConfirm.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onConfirmed(); // <--- Menjalankan perintah hapus yang dikirim
+                listener.onConfirmed();
             }
             dialog.dismiss();
         });
 
         dialog.show();
     }
-
-
 
     @Override
     public void onResume() {
@@ -270,6 +287,6 @@ public class FavesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (musicHelper != null) musicHelper.close();
+        // HAPUS MUSICHELPER.CLOSE() DI SINI AGAR DATABASE TIDAK MATI MENDADAK SAAT PERPINDAHAN TAB/MODE
     }
 }

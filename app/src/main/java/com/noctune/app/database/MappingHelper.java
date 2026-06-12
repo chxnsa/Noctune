@@ -68,8 +68,15 @@ public class MappingHelper {
             String imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.PlaylistTrackColumns.IMAGE_URL));
 
+            // --- PERBAIKAN: Ambil data statistik dari cursor SQLite ---
+            String playcount = cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.PlaylistTrackColumns.PLAYCOUNT));
+            String listeners = cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.PlaylistTrackColumns.LISTENERS));
+
+            // Masukkan variabel playcount dan listeners ke dalam Constructor model object
             tracks.add(new PlaylistTrack(
-                    id, playlistId, trackName, artistName, duration, imageUrl));
+                    id, playlistId, trackName, artistName, duration, imageUrl, playcount, listeners));
         }
         return tracks;
     }

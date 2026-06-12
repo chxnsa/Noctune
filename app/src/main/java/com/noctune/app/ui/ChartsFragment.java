@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.adapter.ChartAdapter;
 import com.noctune.app.model.TopTracksResponse;
+import com.noctune.app.model.Track;
 import com.noctune.app.network.ApiService;
 import com.noctune.app.network.RetrofitClient;
 import com.noctune.app.utils.Constants;
@@ -42,14 +43,14 @@ public class ChartsFragment extends Fragment {
     // Daftar negara
     private final String[] countries = {
             "global", "indonesia", "united states",
-            "united kingdom", "japan", "south korea",
+            "united kingdom", "japan",
             "australia", "germany"
     };
 
     // Label display
     private final String[] countryLabels = {
             "GLOBAL", "INDONESIA", "USA",
-            "UK", "JAPAN", "KOREA",
+            "UK", "JAPAN",
             "AUSTRALIA", "GERMANY"
     };
     // Warna chip
@@ -139,13 +140,10 @@ public class ChartsFragment extends Fragment {
         executor.execute(() -> {
             Call<TopTracksResponse> call;
 
-            // Global pakai chart.gettoptracks
-            // Negara spesifik pakai geo.gettoptracks
             if (country.equals("global")) {
                 call = apiService.getTopTracks(Constants.API_KEY, 1, 50);
             } else {
-                call = apiService.getTracksByCountry(
-                        country, Constants.API_KEY, 50);
+                call = apiService.getTracksByCountry(country, Constants.API_KEY, 50);
             }
 
             call.enqueue(new Callback<TopTracksResponse>() {
@@ -155,10 +153,23 @@ public class ChartsFragment extends Fragment {
                     handler.post(() -> {
                         if (response.isSuccessful() && response.body() != null
                                 && response.body().getTracks() != null) {
-                            chartAdapter.setTracks(
-                                    response.body().getTracks().getTrack());
+
+                            java.util.List<Track> trackList = response.body().getTracks().getTrack();
+
+                            // --- PERBAIKAN: EMULASI DATA UNTUK PETA DATA REGIONAL/GEO ---
+                            if (!country.equals("global") && trackList != null) {
+                                for (Track t : trackList) {
+                                    // Geo API Last.fm meletakkan angka jumlah dengar di objek listeners,
+                                    // sedangkan playcount-nya kosong. Kita pindahkan nilainya agar adapter tidak membaca null.
+                                    if ((t.getPlaycount() == null || t.getPlaycount().isEmpty())
+                                            && t.getListeners() != null) {
+                                        t.setPlaycount(t.getListeners());
+                                    }
+                                }
+                            }
+
+                            chartAdapter.setTracks(trackList);
                         } else {
-                            // SEBELUMNYA: "No chart data available"
                             ToastHelper.showSuccess(getActivity(), "[NO CHART DATA AVAILABLE]");
                             btnRetry.setVisibility(View.VISIBLE);
                         }
@@ -169,7 +180,6 @@ public class ChartsFragment extends Fragment {
                 public void onFailure(@NonNull Call<TopTracksResponse> call,
                                       @NonNull Throwable t) {
                     handler.post(() -> {
-                        // SEBELUMNYA: "Error: " + t.getMessage()
                         ToastHelper.showError(getActivity(), "[ERROR: " + t.getMessage().toUpperCase() + "]");
                         btnRetry.setVisibility(View.VISIBLE);
                     });

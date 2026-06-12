@@ -28,6 +28,7 @@ import com.noctune.app.model.Track;
 import com.noctune.app.network.LyricsClient;
 import com.noctune.app.network.LyricsService;
 import com.noctune.app.ui.ToastHelper;
+import com.noctune.app.utils.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class DetailActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        // AMBIL PARCELABLE CUKUP SEKALI
         track = getIntent().getParcelableExtra("track");
 
         // Init views
@@ -71,9 +73,10 @@ public class DetailActivity extends AppCompatActivity {
         btnFave = findViewById(R.id.btn_fave);
         Button btnYoutube = findViewById(R.id.btn_youtube);
         Button btnAddPlaylist = findViewById(R.id.btn_add_playlist);
-        btnAddPlaylist.setOnClickListener(v -> showAddToPlaylistDialog());
         tvLyrics = findViewById(R.id.tv_lyrics);
         pbLyrics = findViewById(R.id.pb_lyrics);
+
+        btnAddPlaylist.setOnClickListener(v -> showAddToPlaylistDialog());
 
         // Init SQLite
         musicHelper = MusicHelper.getInstance(getApplicationContext());
@@ -100,27 +103,43 @@ public class DetailActivity extends AppCompatActivity {
             tvPlaycount.setText(formatCount(track.getPlaycount()));
             tvDuration.setText(formatDuration(track.getDuration()));
 
-            String imageUrl = track.getImageUrl();
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                Picasso.get()
-                        .load(imageUrl)
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .into(ivImage);
+            if (track != null) {
+                tvTrackName.setText(track.getName());
+
+                if (track.getArtist() != null) {
+                    tvArtistName.setText(track.getArtist().getName());
+
+                    // Klik Nama Artis -> Ke ArtistDetailActivity
+                    tvArtistName.setOnClickListener(v -> {
+                        Intent intent = new Intent(DetailActivity.this, ArtistDetailActivity.class);
+                        intent.putExtra("artist_name", track.getArtist().getName());
+                        startActivity(intent);
+                    });
+                }
+
+                tvListeners.setText(formatCount(track.getListeners()));
+                tvPlaycount.setText(formatCount(track.getPlaycount()));
+                tvDuration.setText(formatDuration(track.getDuration()));
+
+                String artistName = track.getArtist() != null ? track.getArtist().getName() : "";
+                com.noctune.app.utils.ImageLoader.loadTrackImage(
+                        ivImage,
+                        track.getImageUrl(),
+                        track.getName(),
+                        artistName
+                );
+
+                checkFavoriteStatus();
+                loadLyrics();
             }
 
             checkFavoriteStatus();
-
-            // Load lirik otomatis
             loadLyrics();
         }
 
-        // Tombol back
+        // Tombol-tombol aksi
         tvBack.setOnClickListener(v -> finish());
-
-        // Tombol favorit
         btnFave.setOnClickListener(v -> toggleFavorite());
-
-        // Tombol YouTube — buka browser
         btnYoutube.setOnClickListener(v -> openYoutube());
     }
 
@@ -334,16 +353,34 @@ public class DetailActivity extends AppCompatActivity {
                 // 2. Buat list String nama playlist (dibuat Kapital) untuk dimasukkan ke Spinner
                 ArrayList<String> playlistNames = new ArrayList<>();
                 for (Playlist p : playlists) {
-                    playlistNames.add("SELECT: " + p.getName().toUpperCase());
+                    playlistNames.add(p.getName().toUpperCase());
                 }
 
                 // 3. Pasang Array Adapter kustom menggunakan layout item_spinner_playlist kita
                 android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<String>(
-                        this, R.layout.item_spinner_playlist, playlistNames) {
+                        this,
+                        R.layout.item_spinner_playlist,
+                        R.id.tv_spinner_item, // SUNTIKKAN ID INI AGAR TIDAK ERROR
+                        playlistNames
+                ) {
+                    @NonNull
+                    @Override
+                    public View getView(int position, View convertView, @NonNull android.view.ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        // Memastikan background utama spinner tetap transparan agar mengikuti brutalist_flat_card
+                        view.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                        return view;
+                    }
+
                     @Override
                     public View getDropDownView(int position, View convertView, @NonNull android.view.ViewGroup parent) {
-                        // Paksa baris dropdown yang meluncur ke bawah menggunakan layout kustom kita juga
-                        return LayoutInflater.from(getContext()).inflate(R.layout.item_spinner_playlist, parent, false);
+                        // Paksa baris dropdown menggunakan layout kustom dan mengarah ke ID TextView yang benar
+                        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_spinner_playlist, parent, false);
+                        TextView textView = view.findViewById(R.id.tv_spinner_item);
+                        if (textView != null) {
+                            textView.setText(getItem(position));
+                        }
+                        return view;
                     }
                 };
                 spinnerPlaylists.setAdapter(adapter);
@@ -396,11 +433,14 @@ public class DetailActivity extends AppCompatActivity {
             values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.DURATION, track.getDuration());
             values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.IMAGE_URL, track.getImageUrl());
 
+            values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.PLAYCOUNT, track.getPlaycount());
+            values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.LISTENERS, track.getListeners());
+
             long result = musicHelper.insertTrackToPlaylist(values);
 
             handler.post(() -> {
                 if (result > 0) {
-                    ToastHelper.showSuccess(DetailActivity.this, "[ADDED TO" + playlist.getName().toUpperCase() + "]");
+                    ToastHelper.showSuccess(DetailActivity.this, "[ADDED TO " + playlist.getName().toUpperCase() + "]");
                 }
             });
         });

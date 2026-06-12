@@ -43,7 +43,8 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Track track = tracks.get(position);
-        holder.setData(track);
+        // Kita kirim posisi asli list ke holder
+        holder.setData(track, position + 1);
     }
 
     @Override
@@ -53,6 +54,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private TextView tvRank; // PERBAIKAN: Tambah variabel TextView untuk penomoran
         private ImageView ivImage;
         private TextView tvTrackName;
         private TextView tvArtistName;
@@ -60,21 +62,38 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // PERBAIKAN: Inisialisasi tv_rank dari layout item_track.xml kamu
+            tvRank = itemView.findViewById(R.id.tv_rank);
             ivImage = itemView.findViewById(R.id.iv_track_image);
             tvTrackName = itemView.findViewById(R.id.tv_track_name);
             tvArtistName = itemView.findViewById(R.id.tv_artist_name);
             tvPlaycount = itemView.findViewById(R.id.tv_playcount);
         }
 
-        public void setData(Track track) {
+        // PERBAIKAN: Tambah parameter int rank
+        public void setData(Track track, int rank) {
+
+            // PERBAIKAN: Format angka agar jika di bawah 10 tampil berawalan nol (01, 02, ... 10, 11)
+            if (tvRank != null) {
+                String formattedRank = (rank < 10) ? "0" + rank : String.valueOf(rank);
+                tvRank.setText(formattedRank);
+            }
+
             tvTrackName.setText(track.getName());
 
             if (track.getArtist() != null) {
                 tvArtistName.setText(track.getArtist().getName());
             }
 
-            tvPlaycount.setText(formatCount(track.getPlaycount()) + " PLAYS");
-
+            if (track.getPlaycount() != null && !track.getPlaycount().isEmpty()) {
+                tvPlaycount.setText(formatCount(track.getPlaycount()) + " PLAYS");
+                tvPlaycount.setVisibility(View.VISIBLE);
+            } else {
+                // Jika Last.fm tidak mengembalikan data playcount di tag genre,
+                // kita tampilkan text default alih-alih menyembunyikannya agar layout tidak pincang
+                tvPlaycount.setText("0 PLAYS");
+                tvPlaycount.setVisibility(View.VISIBLE);
+            }
 
             String artistName = track.getArtist() != null ?
                     track.getArtist().getName() : "";
@@ -93,7 +112,6 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
             });
         }
 
-        // Format angka — 27304609 → 27.3M
         private String formatCount(String countStr) {
             try {
                 long count = Long.parseLong(countStr);

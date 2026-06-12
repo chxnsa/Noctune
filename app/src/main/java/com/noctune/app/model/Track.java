@@ -35,24 +35,24 @@ public class Track implements Parcelable {
     public String getDuration() { return duration; }
     public String getPlaycount() { return playcount; }
     public String getListeners() { return listeners; }
+    public void setPlaycount(String playcount) { this.playcount = playcount; }
+    public void setListeners(String listeners) { this.listeners = listeners; }
     public String getUrl() { return url; }
     public TrackArtist getArtist() { return artist; }
 
     public String getImageUrl() {
-        // Kalau sudah di-cache (dari Parcel), langsung return
-        if (cachedImageUrl != null && !cachedImageUrl.isEmpty()) {
+        if (cachedImageUrl != null && !cachedImageUrl.trim().isEmpty()) {
             return cachedImageUrl;
         }
 
-        // Coba ambil dari list images — dari yang terbesar dulu
-        if (images != null) {
-            // Coba extralarge (index 3) dulu
+        if (images != null && !images.isEmpty()) {
             for (int i = images.size() - 1; i >= 0; i--) {
                 String imgUrl = images.get(i).getUrl();
                 if (imgUrl != null
                         && !imgUrl.isEmpty()
                         && !imgUrl.contains("2a96cbd8b46e442fc41c2b86b821562f")) {
-                    // Filter URL placeholder Last.fm
+                    // Update cached agar saat di-write ke parcel datanya tidak null
+                    cachedImageUrl = imgUrl;
                     return imgUrl;
                 }
             }
@@ -73,6 +73,7 @@ public class Track implements Parcelable {
             artist = new TrackArtist(artistName);
         }
 
+        // Baca cachedImageUrl paling terakhir
         cachedImageUrl = in.readString();
     }
 
@@ -83,10 +84,14 @@ public class Track implements Parcelable {
         parcel.writeString(playcount);
         parcel.writeString(listeners);
         parcel.writeString(url);
+
         parcel.writeString(artist != null ? artist.getName() : null);
-        // Cache imageUrl sebelum dikirim via Parcel
-        parcel.writeString(getImageUrl());
+
+        // Panggil getImageUrl() dulu untuk memastikan cachedImageUrl terisi sebelum ditulis!
+        String currentImg = getImageUrl();
+        parcel.writeString(currentImg);
     }
+
 
     @Override
     public int describeContents() { return 0; }

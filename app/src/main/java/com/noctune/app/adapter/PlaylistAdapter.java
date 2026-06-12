@@ -73,16 +73,48 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
             });
 
             // Hapus playlist
-            tvDelete.setOnClickListener(v -> {
-                MusicHelper helper = MusicHelper.getInstance(
-                        activity.getApplicationContext());
-                helper.open();
-                helper.deletePlaylist(String.valueOf(playlist.getId()));
-                helper.close();
 
-                playlists.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-                ToastHelper.showError(activity, "[SYSTEM_LOG: PLAYLIST_PURGED_SUCCESSFULLY]");
+            // Tombol hapus seluruh playlist dengan dialog konfirmasi kustom
+            tvDelete.setOnClickListener(v -> {
+                // Inflate layout dialog kustom brutalismu
+                View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_confirm_delete, null);
+                androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(activity)
+                        .setView(dialogView).create();
+
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView tvMessage = dialogView.findViewById(R.id.tv_confirm_message);
+                android.widget.Button btnCancel = dialogView.findViewById(R.id.btn_cancel_delete);
+                android.widget.Button btnConfirm = dialogView.findViewById(R.id.btn_confirm_delete);
+
+                // Set pesan khusus untuk penghapusan wadah playlist
+                tvMessage.setText("ARE YOU SURE YOU WANT TO WIPE THE ENTIRE PLAYLIST '" + playlist.getName().toUpperCase() + "'? THIS WILL EJECT ALL TRACKS INSIDE.");
+
+                // Jika CANCEL
+                btnCancel.setOnClickListener(vCancel -> dialog.dismiss());
+
+                // Jika REMOVE (Konfirmasi)
+                btnConfirm.setOnClickListener(vConfirm -> {
+                    MusicHelper helper = MusicHelper.getInstance(activity.getApplicationContext());
+                    helper.open();
+
+                    // Eksekusi hapus playlist dari database SQLite
+                    int result = helper.deletePlaylist(String.valueOf(playlist.getId()));
+                    if (result > 0) {
+                        int currentPosition = getAdapterPosition();
+                        if (currentPosition != RecyclerView.NO_POSITION) {
+                            playlists.remove(currentPosition);
+                            notifyItemRemoved(currentPosition);
+                            ToastHelper.showError(activity, "[PLAYLIST DELETED]");
+                        }
+                    }
+                    helper.close();
+                    dialog.dismiss();
+                });
+
+                dialog.show();
             });
         }
     }
