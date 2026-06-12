@@ -48,11 +48,10 @@ public class ChartsFragment extends Fragment {
 
     // Label display
     private final String[] countryLabels = {
-            "🌍 GLOBAL", "🇮🇩 INDONESIA", "🇺🇸 USA",
-            "🇬🇧 UK", "🇯🇵 JAPAN", "🇰🇷 KOREA",
-            "🇦🇺 AUSTRALIA", "🇩🇪 GERMANY"
+            "GLOBAL", "INDONESIA", "USA",
+            "UK", "JAPAN", "KOREA",
+            "AUSTRALIA", "GERMANY"
     };
-
     // Warna chip
     private final String[] chipColors = {
             "#FFD600", "#E63329", "#1565C0",
@@ -92,30 +91,32 @@ public class ChartsFragment extends Fragment {
     }
 
     private void buildCountryChips() {
+        llCountryChips.removeAllViews(); // Bersihkan container terlebih dahulu
         for (int i = 0; i < countries.length; i++) {
             final String country = countries[i];
             final String label = countryLabels[i];
-            final String color = chipColors[i];
 
             TextView chip = new TextView(getActivity());
             chip.setText(label);
-            chip.setTextColor(Color.parseColor(
-                    color.equals("#FFD600") ? "#000000" : "#FFFFFF"));
-            chip.setBackgroundColor(Color.parseColor(color));
             chip.setTextSize(11f);
-            chip.setPadding(20, 10, 20, 10);
+            chip.setPadding(28, 14, 28, 14); // padding disesuaikan agar proporsional kotak
             chip.setTypeface(android.graphics.Typeface.MONOSPACE);
+            chip.setGravity(android.view.Gravity.CENTER);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins(0, 0, 8, 0);
+            params.setMargins(0, 0, 12, 0); // Jarak antar kotak chip
             chip.setLayoutParams(params);
+
+            // Tentukan style awal berdasarkan status aktif
+            updateChipStyle(chip, country.equals(selectedCountry));
 
             chip.setOnClickListener(v -> {
                 selectedCountry = country;
-                tvLabel.setText("🏆 TOP TRACKS — " + label);
+                tvLabel.setText("TOP TRACKS — " + label);
+                refreshChipStyles(); // Perbarui status visual semua tombol chip
                 loadCharts(country);
             });
 
@@ -126,7 +127,7 @@ public class ChartsFragment extends Fragment {
     private void loadCharts(String country) {
         if (!NetworkUtils.isConnected(getActivity())) {
             btnRetry.setVisibility(View.VISIBLE);
-            ToastHelper.showError(getActivity(), "[ERROR: NO_INTERNET_CONNECTION]");
+            ToastHelper.showError(getActivity(), "NO INTERNET CONNECTION]");
             return;
         }
 
@@ -158,7 +159,7 @@ public class ChartsFragment extends Fragment {
                                     response.body().getTracks().getTrack());
                         } else {
                             // SEBELUMNYA: "No chart data available"
-                            ToastHelper.showSuccess(getActivity(), "[SYSTEM_LOG: NO_CHART_DATA_AVAILABLE]");
+                            ToastHelper.showSuccess(getActivity(), "[NO CHART DATA AVAILABLE]");
                             btnRetry.setVisibility(View.VISIBLE);
                         }
                     });
@@ -169,11 +170,31 @@ public class ChartsFragment extends Fragment {
                                       @NonNull Throwable t) {
                     handler.post(() -> {
                         // SEBELUMNYA: "Error: " + t.getMessage()
-                        ToastHelper.showError(getActivity(), "[CORE_ERROR: " + t.getMessage().toUpperCase() + "]");
+                        ToastHelper.showError(getActivity(), "[ERROR: " + t.getMessage().toUpperCase() + "]");
                         btnRetry.setVisibility(View.VISIBLE);
                     });
                 }
             });
         });
+    }
+
+    private void refreshChipStyles() {
+        for (int i = 0; i < llCountryChips.getChildCount(); i++) {
+            TextView chip = (TextView) llCountryChips.getChildAt(i);
+            String country = countries[i];
+            updateChipStyle(chip, country.equals(selectedCountry));
+        }
+    }
+
+    private void updateChipStyle(TextView chip, boolean isActive) {
+        if (isActive) {
+            // Active Style: Tetap Kuning Menyala Khas Noctune
+            chip.setBackgroundColor(Color.parseColor("#FFD600"));
+            chip.setTextColor(Color.BLACK);
+        } else {
+            // Inactive Style: Menggunakan latar abu-abu gelap semen, teks abu-abu redup
+            chip.setBackgroundColor(Color.parseColor("#222222")); // Kotak abu-abu arang kaku
+            chip.setTextColor(Color.parseColor("#888888")); // Teks abu-abu medium (tidak silau, tidak hilang)
+        }
     }
 }

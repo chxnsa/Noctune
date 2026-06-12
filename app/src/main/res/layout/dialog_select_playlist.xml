@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -12,8 +13,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="[CONSOLE_ACTION: SELECT_TARGET_CONTAINER]"
-        android:textColor="@color/brand_yellow"
+        android:text="SELECT PLAYLIST"
+        android:textColor="@color/border_color"
         android:textSize="12sp"
         android:fontFamily="@font/space_mono"
         android:textStyle="bold"
@@ -45,23 +46,25 @@
         android:layout_height="48dp"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btn_cancel_dialog"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="ABORT"
+            android:text="CANCEL"
             android:layout_marginRight="4dp"
+            app:backgroundTint="@color/brand_red"
+            android:textColor="#FFFFFF"
             style="@style/BrutalistButton"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btn_confirm_dialog"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.3"
-            android:text="MOUNT_TRACK"
+            android:text="SAVE"
             android:layout_marginLeft="4dp"
-            android:background="@color/brand_yellow"
+            app:backgroundTint="@color/brand_yellow"
             android:textColor="#000000"
             style="@style/BrutalistButton"/>
     </LinearLayout>

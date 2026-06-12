@@ -242,9 +242,9 @@ public class DetailActivity extends AppCompatActivity {
                 updateFaveButton();
                 // SEBELUMNYA: isFavorite ? "Added to Favorites!" : "Removed from Favorites"
                 if (isFavorite) {
-                    ToastHelper.showSuccess(DetailActivity.this, "[SYSTEM_LOG: ADDED_TO_FAVORITES]");
+                    ToastHelper.showSuccess(DetailActivity.this, "[ADDED TO FAVORITES]");
                 } else {
-                    ToastHelper.showError(DetailActivity.this, "[SYSTEM_LOG: REMOVED_FROM_FAVORITES]");
+                    ToastHelper.showError(DetailActivity.this, "[REMOVED FROM FAVORITES]");
                 }
             });
         });
@@ -252,12 +252,12 @@ public class DetailActivity extends AppCompatActivity {
 
     private void updateFaveButton() {
         if (isFavorite) {
-            btnFave.setText("♥ SAVED");
+            btnFave.setText("❤ SAVED");
             btnFave.setBackgroundTintList(
                     android.content.res.ColorStateList.valueOf(
                             android.graphics.Color.parseColor("#E63329")));
         } else {
-            btnFave.setText("♥ SAVE");
+            btnFave.setText("♡ SAVE");
             btnFave.setBackgroundTintList(
                     android.content.res.ColorStateList.valueOf(
                             android.graphics.Color.parseColor("#FFD600")));
@@ -307,7 +307,7 @@ public class DetailActivity extends AppCompatActivity {
 
             handler.post(() -> {
                 if (playlists.isEmpty()) {
-                    ToastHelper.showError(DetailActivity.this, "[NOTICE: NO_PLAYLISTS_FOUND. CREATE_ONE_IN_FAVES_TAB]");
+                    ToastHelper.showError(DetailActivity.this, "[NO PLAYLISTS FOUND. CREATE ONE IN FAVES TAB]");
                     return;
                 }
 
@@ -393,7 +393,7 @@ public class DetailActivity extends AppCompatActivity {
 
             handler.post(() -> {
                 if (result > 0) {
-                    ToastHelper.showSuccess(DetailActivity.this, "[SYSTEM_LOG: ADDED_TO_" + playlist.getName().toUpperCase() + "]");
+                    ToastHelper.showSuccess(DetailActivity.this, "[ADDED TO" + playlist.getName().toUpperCase() + "]");
                 }
             });
         });

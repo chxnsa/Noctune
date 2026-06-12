@@ -96,7 +96,7 @@ public class PlaylistTrackAdapter extends
 
             // Hapus dari playlist dengan konfirmasi
             tvRemove.setOnClickListener(v -> {
-                ToastHelper.showConfirmDialog(activity, "REMOVE_TRACK_FROM_PLAYLIST?", () -> {
+                ToastHelper.showConfirmDialog(activity, "REMOVE TRACK FROM PLAYLIST?", () -> {
                     MusicHelper helper = MusicHelper.getInstance(
                             activity.getApplicationContext());
                     helper.open();
@@ -107,7 +107,7 @@ public class PlaylistTrackAdapter extends
                     if (pos != RecyclerView.NO_POSITION) {
                         tracks.remove(pos);
                         notifyItemRemoved(pos);
-                        ToastHelper.showSuccess(activity, "TRACK_REMOVED_FROM_PLAYLIST");
+                        ToastHelper.showSuccess(activity, "TRACK REMOVED FROM PLAYLIST");
                     }
 
                     if (listener != null) listener.onTrackRemoved();

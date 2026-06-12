@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -47,11 +46,6 @@ public class ExploreFragment extends Fragment {
             "electronic", "classical", "indie", "metal"
     };
 
-    private final String[] chipColors = {
-            "#E63329", "#FFD600", "#000000", "#2D6A4F",
-            "#9C27B0", "#1565C0", "#FF6B35", "#424242"
-    };
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -71,13 +65,11 @@ public class ExploreFragment extends Fragment {
         tvTracksLabel = view.findViewById(R.id.tv_tracks_label);
         llGenreChips = view.findViewById(R.id.ll_genre_chips);
 
-        // Setup RecyclerView artists — horizontal
         rvArtists.setLayoutManager(new LinearLayoutManager(
                 getActivity(), LinearLayoutManager.HORIZONTAL, false));
         artistAdapter = new ArtistHorizontalAdapter(getActivity());
         rvArtists.setAdapter(artistAdapter);
 
-        // Setup RecyclerView tracks — vertical
         rvTracks.setLayoutManager(new LinearLayoutManager(getActivity()));
         trackAdapter = new TrackAdapter(getActivity());
         rvTracks.setAdapter(trackAdapter);
@@ -92,27 +84,29 @@ public class ExploreFragment extends Fragment {
     }
 
     private void buildGenreChips() {
+        llGenreChips.removeAllViews();
         for (int i = 0; i < genres.length; i++) {
             final String genre = genres[i];
-            final String color = chipColors[i];
 
             TextView chip = new TextView(getActivity());
             chip.setText(genre.toUpperCase());
-            chip.setTextColor(Color.WHITE);
-            chip.setBackgroundColor(Color.parseColor(color));
             chip.setTextSize(12f);
-            chip.setPadding(24, 12, 24, 12);
+            chip.setPadding(32, 16, 32, 16);
             chip.setTypeface(android.graphics.Typeface.MONOSPACE);
+            chip.setGravity(android.view.Gravity.CENTER);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins(0, 0, 12, 0);
+            params.setMargins(0, 0, 16, 0);
             chip.setLayoutParams(params);
+
+            updateChipStyle(chip, genre.equals(selectedGenre));
 
             chip.setOnClickListener(v -> {
                 selectedGenre = genre;
+                refreshChipStyles();
                 loadExploreData(genre);
             });
 
@@ -120,10 +114,31 @@ public class ExploreFragment extends Fragment {
         }
     }
 
+    private void refreshChipStyles() {
+        for (int i = 0; i < llGenreChips.getChildCount(); i++) {
+            TextView chip = (TextView) llGenreChips.getChildAt(i);
+            String genre = genres[i];
+            updateChipStyle(chip, genre.equals(selectedGenre));
+        }
+    }
+
+    private void updateChipStyle(TextView chip, boolean isActive) {
+        if (isActive) {
+            // Active Style: Kuning Menyala Khas Noctune
+            chip.setBackgroundColor(Color.parseColor("#FFD600"));
+            chip.setTextColor(Color.BLACK);
+            // Tambahkan border kaku jika didukung layout atau biarkan solid brutalist
+        } else {
+            // Inactive Style: Menyelam ke latar belakang gelap, tidak putih lagi
+            chip.setBackgroundColor(Color.parseColor("#1E1E1E")); // Menyesuaikan dengan bg_surface
+            chip.setTextColor(Color.parseColor("#757575")); // Abu-abu diredam
+        }
+    }
+
     private void loadExploreData(String genre) {
         if (!NetworkUtils.isConnected(getActivity())) {
             btnRetry.setVisibility(View.VISIBLE);
-            ToastHelper.showError(getActivity(), "[ERROR: NO_INTERNET_CONNECTION]");
+            ToastHelper.showError(getActivity(), "[ERROR: NO INTERNET CONNECTION]");
             return;
         }
 
@@ -162,7 +177,7 @@ public class ExploreFragment extends Fragment {
                 public void onFailure(@NonNull Call<TopArtistsResponse> call,
                                       @NonNull Throwable t) {
                     handler.post(() -> {
-                        ToastHelper.showError(getActivity(), "[CORE_ERROR: FAILED_TO_LOAD_ARTISTS]");
+                        ToastHelper.showError(getActivity(), "[ERROR: FAILED TO LOAD ARTISTS]");
                     });
                 }
             });
@@ -198,7 +213,7 @@ public class ExploreFragment extends Fragment {
                 public void onFailure(@NonNull Call<TopTracksResponse> call,
                                       @NonNull Throwable t) {
                     handler.post(() -> {
-                        ToastHelper.showError(getActivity(), "[CORE_ERROR: FAILED_TO_LOAD_TRACKS]");
+                        ToastHelper.showError(getActivity(), "[ERROR: FAILED TO LOAD TRACKS]");
                         btnRetry.setVisibility(View.VISIBLE);
                     });
                 }

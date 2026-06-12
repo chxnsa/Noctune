@@ -4,6 +4,7 @@
     <color name="bg_surface">#121212</color>
     <color name="border_color">#FFFFFF</color>
     <color name="text_primary">#FFFFFF</color>
+    <color name="text">#FFD600</color>
     <color name="text_secondary">#999999</color>
     <color name="brand_yellow">#FFD600</color> <!-- Kuning tetap menyala sebagai aksen industrial -->
     <color name="brand_red">#FF4D4D</color>    <!-- Merah disesuaikan agar lebih ramah OLED -->

@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
         // Kasih feedback kalau tidak ada hasil
         if (filtered.isEmpty()) {
             // SEBELUMNYA: "No results for \"" + query + "\""
-            ToastHelper.showSuccess(getActivity(), "[SEARCH_LOG: NO_RESULTS_FOR_" + query.toUpperCase() + "]");
+            ToastHelper.showSuccess(getActivity(), "[NO RESULTS FOR " + query.toUpperCase() + "]");
         }
     }
 
@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
         if (!NetworkUtils.isConnected(getActivity())) {
             btnRetry.setVisibility(View.VISIBLE);
             // SEBELUMNYA: "No internet connection"
-            ToastHelper.showError(getActivity(), "[ERROR: NO_INTERNET_CONNECTION]");
+            ToastHelper.showError(getActivity(), "[ERROR: NO INTERNET CONNECTION]");
             return;
         }
 
@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
                             }
                         } else {
                             // SEBELUMNYA: "Failed to load data"
-                            ToastHelper.showError(getActivity(), "[CORE_ERROR: FAILED_TO_LOAD_DATA]");
+                            ToastHelper.showError(getActivity(), "[ERROR: FAILED TO LOAD DATA]");
                             btnRetry.setVisibility(View.VISIBLE);
                         }
                     });
@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment {
                                       @NonNull Throwable t) {
                     handler.post(() -> {
                         // SEBELUMNYA: "Error: " + t.getMessage()
-                        ToastHelper.showError(getActivity(), "[SERVER_ERROR: " + t.getMessage().toUpperCase() + "]");
+                        ToastHelper.showError(getActivity(), "[ERROR: " + t.getMessage().toUpperCase() + "]");
                         btnRetry.setVisibility(View.VISIBLE);
                     });
                 }

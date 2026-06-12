@@ -72,7 +72,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
             // Hapus playlist dengan konfirmasi
             tvDelete.setOnClickListener(v -> {
-                ToastHelper.showConfirmDialog(activity, "PURGE_PLAYLIST: " + playlist.getName().toUpperCase() + "?", () -> {
+                ToastHelper.showConfirmDialog(activity, "REMOVE PLAYLIST: " + playlist.getName().toUpperCase() + "?", () -> {
                     MusicHelper helper = MusicHelper.getInstance(activity.getApplicationContext());
                     helper.open();
                     helper.deletePlaylist(String.valueOf(playlist.getId()));
@@ -82,7 +82,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                     if (pos != RecyclerView.NO_POSITION) {
                         playlists.remove(pos);
                         notifyItemRemoved(pos);
-                        ToastHelper.showSuccess(activity, "PLAYLIST_DELETED_SUCCESSFULLY");
+                        ToastHelper.showSuccess(activity, "PLAYLIST REMOVES SUCCESSFULLY");
                     }
                 });
             });

@@ -49,16 +49,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ===== SEARCH ICON =====
-        findViewById(R.id.tv_search_icon).setOnClickListener(v -> {
-            BottomNavigationView nav = findViewById(R.id.bottom_navigation);
-            if (nav.getSelectedItemId() != R.id.nav_home) {
-                nav.setSelectedItemId(R.id.nav_home);
-            }
-            // SEBELUMNYA: "Use the search bar to find tracks"
-            ToastHelper.showSuccess(this, "[SYSTEM_GUIDE: USE_SEARCH_BAR_TO_FIND_TRACKS]");
-        });
-
         // ===== BOTTOM NAVIGATION =====
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(item -> {

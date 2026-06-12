@@ -78,7 +78,7 @@ public class FavesAdapter extends RecyclerView.Adapter<FavesAdapter.ViewHolder> 
 
             // Tombol hapus dari favorites dengan konfirmasi
             tvDelete.setOnClickListener(v -> {
-                ToastHelper.showConfirmDialog(activity, "PURGE_TRACK_FROM_FAVORITES?", () -> {
+                ToastHelper.showConfirmDialog(activity, "REMOVE TRACK FROM FAVORITES?", () -> {
                     musicHelper = MusicHelper.getInstance(activity.getApplicationContext());
                     musicHelper.open();
                     int result = musicHelper.deleteById(String.valueOf(fave.getId()));
@@ -87,7 +87,7 @@ public class FavesAdapter extends RecyclerView.Adapter<FavesAdapter.ViewHolder> 
                         if (pos != RecyclerView.NO_POSITION) {
                             favorites.remove(pos);
                             notifyItemRemoved(pos);
-                            ToastHelper.showSuccess(activity, "TRACK_REMOVED_FROM_FAVORITES");
+                            ToastHelper.showSuccess(activity, "TRACK REMOVED FROM FAVORITES");
                         }
                     }
                     musicHelper.close();

@@ -6,7 +6,7 @@
     android:layout_height="48dp"
     android:gravity="center_vertical"
     android:paddingHorizontal="16dp"
-    android:text="PLAYLIST_NAME"
+    android:text="PLAYLIST NAME"
     android:textColor="@color/text_primary"
     android:textSize="14sp"
     android:textStyle="bold"

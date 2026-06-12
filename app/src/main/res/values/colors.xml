@@ -5,6 +5,7 @@
     <color name="border_color">#000000</color>
     <color name="text_primary">#000000</color>
     <color name="text_secondary">#666666</color>
+    <color name="text">#000000</color>
     <color name="brand_yellow">#FFD600</color>
     <color name="brand_red">#E63329</color>
     <color name="container_low">#FFFFFF</color>

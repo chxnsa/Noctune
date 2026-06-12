@@ -57,7 +57,7 @@
             android:id="@+id/tv_playlist_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LOG_STATUS // 0 TRACKS INDEXED"
+            android:text="0 TRACKS"
             android:textColor="@color/text_primary"
             android:textSize="11sp"
             android:textStyle="bold"

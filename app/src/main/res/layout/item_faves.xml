@@ -6,7 +6,6 @@
     android:orientation="horizontal"
     android:padding="12dp"
     android:background="@drawable/brutalist_flat_card"
-    android:layout_marginBottom="8dp"
     android:gravity="center_vertical">
 
     <ImageView

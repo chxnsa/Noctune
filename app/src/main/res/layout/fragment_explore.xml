@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="TOP ARTISTS"
-                android:textColor="@color/brand_yellow"
+                android:textColor="@color/text"
                 android:textSize="16sp"
                 android:fontFamily="@font/space_mono"
                 android:textStyle="bold"/>
@@ -75,13 +75,6 @@
                 android:paddingStart="16dp"
                 android:clipToPadding="false"/>
 
-            <!-- Border separator -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/border_color"
-                android:layout_marginTop="8dp"/>
-
             <!-- Section: TOP TRACKS (vertical) -->
             <TextView
                 android:id="@+id/tv_tracks_label"
@@ -89,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="TOP TRACKS"
-                android:textColor="@color/brand_yellow"
+                android:textColor="@color/text"
                 android:textSize="16sp"
                 android:fontFamily="@font/space_mono"
                 android:textStyle="bold"/>

@@ -219,7 +219,7 @@
                         android:id="@+id/btn_fave"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:text="♥ SAVE TO FAVES"
+                        android:text="♡ SAVE TO FAVES"
                         android:background="@drawable/brutalist_button_selector"
                         app:backgroundTint="@null"
                         android:textColor="#000000"
