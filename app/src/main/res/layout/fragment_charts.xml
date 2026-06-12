@@ -20,19 +20,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="GLOBAL CHARTS"
-            android:textColor="@color/brand_yellow"
+            android:textColor="@color/text_primary"
             android:textSize="26sp"
             android:fontFamily="@font/bebas_neue"
             android:letterSpacing="0.03"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MODULE // 02"
-            android:textColor="@color/text_secondary"
-            android:textSize="10sp"
-            android:fontFamily="@font/space_mono"
-            android:letterSpacing="0.01"/>
     </LinearLayout>
 
     <View
@@ -74,7 +66,7 @@
         android:gravity="center_vertical"
         android:paddingHorizontal="16dp"
         android:paddingVertical="10dp"
-        android:background="@color/border_color"> <!-- Dinamis mengikuti border -->
+        android:background="@color/brand_yellow">
 
         <View
             android:layout_width="4dp"
@@ -87,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TOP TRACKS — GLOBAL"
-            android:textColor="@color/bg_surface"
+            android:textColor="#000000"
             android:textSize="12sp"
             android:fontFamily="@font/space_mono"
             android:textStyle="bold"

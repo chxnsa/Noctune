@@ -6,10 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.noctune.app.model.Playlist;
 import com.noctune.app.model.Track;
 import com.noctune.app.network.LyricsClient;
 import com.noctune.app.network.LyricsService;
+import com.noctune.app.ui.ToastHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -236,9 +240,12 @@ public class DetailActivity extends AppCompatActivity {
 
             handler.post(() -> {
                 updateFaveButton();
-                Toast.makeText(DetailActivity.this,
-                        isFavorite ? "Added to Favorites!" : "Removed from Favorites",
-                        Toast.LENGTH_SHORT).show();
+                // SEBELUMNYA: isFavorite ? "Added to Favorites!" : "Removed from Favorites"
+                if (isFavorite) {
+                    ToastHelper.showSuccess(DetailActivity.this, "[SYSTEM_LOG: ADDED_TO_FAVORITES]");
+                } else {
+                    ToastHelper.showError(DetailActivity.this, "[SYSTEM_LOG: REMOVED_FROM_FAVORITES]");
+                }
             });
         });
     }
@@ -300,24 +307,52 @@ public class DetailActivity extends AppCompatActivity {
 
             handler.post(() -> {
                 if (playlists.isEmpty()) {
-                    Toast.makeText(this,
-                            "No playlists yet! Create one in Faves tab.",
-                            Toast.LENGTH_SHORT).show();
+                    ToastHelper.showError(DetailActivity.this, "[NOTICE: NO_PLAYLISTS_FOUND. CREATE_ONE_IN_FAVES_TAB]");
                     return;
                 }
 
-                // Buat array nama playlist untuk dialog
-                String[] names = new String[playlists.size()];
-                for (int i = 0; i < playlists.size(); i++) {
-                    names[i] = playlists.get(i).getName();
+                // 1. Inflate Layout Dialog dengan Spinner
+                View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_select_playlist, null);
+                androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setView(dialogView).create();
+
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 }
 
-                new AlertDialog.Builder(this)
-                        .setTitle("ADD TO PLAYLIST")
-                        .setItems(names, (dialog, which) -> {
-                            addTrackToPlaylist(playlists.get(which));
-                        })
-                        .show();
+                Spinner spinnerPlaylists = dialogView.findViewById(R.id.spinner_playlists);
+                Button btnCancel = dialogView.findViewById(R.id.btn_cancel_dialog);
+                Button btnConfirm = dialogView.findViewById(R.id.btn_confirm_dialog);
+
+                // 2. Buat list String nama playlist (dibuat Kapital) untuk dimasukkan ke Spinner
+                ArrayList<String> playlistNames = new ArrayList<>();
+                for (Playlist p : playlists) {
+                    playlistNames.add("SELECT: " + p.getName().toUpperCase());
+                }
+
+                // 3. Pasang Array Adapter kustom menggunakan layout item_spinner_playlist kita
+                android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<String>(
+                        this, R.layout.item_spinner_playlist, playlistNames) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, @NonNull android.view.ViewGroup parent) {
+                        // Paksa baris dropdown yang meluncur ke bawah menggunakan layout kustom kita juga
+                        return LayoutInflater.from(getContext()).inflate(R.layout.item_spinner_playlist, parent, false);
+                    }
+                };
+                spinnerPlaylists.setAdapter(adapter);
+
+                // 4. Tombol Aksi Eksekusi
+                btnConfirm.setOnClickListener(v -> {
+                    int selectedPosition = spinnerPlaylists.getSelectedItemPosition();
+                    Playlist selectedPlaylist = playlists.get(selectedPosition);
+
+                    // Kirim playlist yang dipilih ke fungsi insert database (Validasi duplikat tetap berjalan!)
+                    addTrackToPlaylist(selectedPlaylist);
+                    dialog.dismiss();
+                });
+
+                btnCancel.setOnClickListener(v -> dialog.dismiss());
+                dialog.show();
             });
         });
     }
@@ -327,26 +362,38 @@ public class DetailActivity extends AppCompatActivity {
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
+            musicHelper.open();
+            String artistName = track.getArtist() != null ? track.getArtist().getName() : "";
+
+            // PROTEKSI VALIDASI: Cek apakah lagu sudah ada di playlist ini?
+            boolean isAlreadyAdded = musicHelper.isTrackInPlaylist(
+                    String.valueOf(playlist.getId()),
+                    track.getName(),
+                    artistName
+            );
+
+            if (isAlreadyAdded) {
+                handler.post(() -> {
+                    // Tembakkan Toast Error jika data duplikat terdeteksi!
+                    ToastHelper.showError(DetailActivity.this,
+                            "[DENIED: '" + track.getName().toUpperCase() + "' ALREADY EXISTS IN " + playlist.getName().toUpperCase() + "]");
+                });
+                return; // Gagalkan operasi insert database
+            }
+
+            // Jika lolos validasi, lakukan komit insert seperti biasa
             ContentValues values = new ContentValues();
-            values.put(com.noctune.app.database.DatabaseContract
-                    .PlaylistTrackColumns.PLAYLIST_ID, playlist.getId());
-            values.put(com.noctune.app.database.DatabaseContract
-                    .PlaylistTrackColumns.TRACK_NAME, track.getName());
-            values.put(com.noctune.app.database.DatabaseContract
-                            .PlaylistTrackColumns.ARTIST_NAME,
-                    track.getArtist() != null ? track.getArtist().getName() : "");
-            values.put(com.noctune.app.database.DatabaseContract
-                    .PlaylistTrackColumns.DURATION, track.getDuration());
-            values.put(com.noctune.app.database.DatabaseContract
-                    .PlaylistTrackColumns.IMAGE_URL, track.getImageUrl());
+            values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID, playlist.getId());
+            values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.TRACK_NAME, track.getName());
+            values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.ARTIST_NAME, artistName);
+            values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.DURATION, track.getDuration());
+            values.put(com.noctune.app.database.DatabaseContract.PlaylistTrackColumns.IMAGE_URL, track.getImageUrl());
 
             long result = musicHelper.insertTrackToPlaylist(values);
 
             handler.post(() -> {
                 if (result > 0) {
-                    Toast.makeText(this,
-                            "Added to " + playlist.getName(),
-                            Toast.LENGTH_SHORT).show();
+                    ToastHelper.showSuccess(DetailActivity.this, "[SYSTEM_LOG: ADDED_TO_" + playlist.getName().toUpperCase() + "]");
                 }
             });
         });

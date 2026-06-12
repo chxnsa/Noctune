@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.database.MusicHelper;
 import com.noctune.app.model.Playlist;
 import com.noctune.app.ui.PlaylistDetailActivity;
+import com.noctune.app.ui.ToastHelper;
 import java.util.ArrayList;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> {
@@ -70,18 +70,21 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                 activity.startActivity(intent);
             });
 
-            // Hapus playlist
+            // Hapus playlist dengan konfirmasi
             tvDelete.setOnClickListener(v -> {
-                MusicHelper helper = MusicHelper.getInstance(
-                        activity.getApplicationContext());
-                helper.open();
-                helper.deletePlaylist(String.valueOf(playlist.getId()));
-                helper.close();
+                ToastHelper.showConfirmDialog(activity, "PURGE_PLAYLIST: " + playlist.getName().toUpperCase() + "?", () -> {
+                    MusicHelper helper = MusicHelper.getInstance(activity.getApplicationContext());
+                    helper.open();
+                    helper.deletePlaylist(String.valueOf(playlist.getId()));
+                    helper.close();
 
-                playlists.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-                Toast.makeText(activity,
-                        "Playlist deleted", Toast.LENGTH_SHORT).show();
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        playlists.remove(pos);
+                        notifyItemRemoved(pos);
+                        ToastHelper.showSuccess(activity, "PLAYLIST_DELETED_SUCCESSFULLY");
+                    }
+                });
             });
         }
     }

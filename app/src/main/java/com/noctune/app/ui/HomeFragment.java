@@ -116,17 +116,16 @@ public class HomeFragment extends Fragment {
 
         // Kasih feedback kalau tidak ada hasil
         if (filtered.isEmpty()) {
-            Toast.makeText(getActivity(),
-                    "No results for \"" + query + "\"",
-                    Toast.LENGTH_SHORT).show();
+            // SEBELUMNYA: "No results for \"" + query + "\""
+            ToastHelper.showSuccess(getActivity(), "[SEARCH_LOG: NO_RESULTS_FOR_" + query.toUpperCase() + "]");
         }
     }
 
     private void loadTracks() {
         if (!NetworkUtils.isConnected(getActivity())) {
             btnRetry.setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(),
-                    "No internet connection", Toast.LENGTH_SHORT).show();
+            // SEBELUMNYA: "No internet connection"
+            ToastHelper.showError(getActivity(), "[ERROR: NO_INTERNET_CONNECTION]");
             return;
         }
 
@@ -159,9 +158,8 @@ public class HomeFragment extends Fragment {
                                 }
                             }
                         } else {
-                            Toast.makeText(getActivity(),
-                                    "Failed to load data",
-                                    Toast.LENGTH_SHORT).show();
+                            // SEBELUMNYA: "Failed to load data"
+                            ToastHelper.showError(getActivity(), "[CORE_ERROR: FAILED_TO_LOAD_DATA]");
                             btnRetry.setVisibility(View.VISIBLE);
                         }
                     });
@@ -171,9 +169,8 @@ public class HomeFragment extends Fragment {
                 public void onFailure(@NonNull Call<TopTracksResponse> call,
                                       @NonNull Throwable t) {
                     handler.post(() -> {
-                        Toast.makeText(getActivity(),
-                                "Error: " + t.getMessage(),
-                                Toast.LENGTH_SHORT).show();
+                        // SEBELUMNYA: "Error: " + t.getMessage()
+                        ToastHelper.showError(getActivity(), "[SERVER_ERROR: " + t.getMessage().toUpperCase() + "]");
                         btnRetry.setVisibility(View.VISIBLE);
                     });
                 }

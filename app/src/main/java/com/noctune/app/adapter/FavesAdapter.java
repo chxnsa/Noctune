@@ -1,18 +1,17 @@
 package com.noctune.app.adapter;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.database.MusicHelper;
 import com.noctune.app.model.FavoriteTrack;
+import com.noctune.app.ui.ToastHelper;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
@@ -77,19 +76,22 @@ public class FavesAdapter extends RecyclerView.Adapter<FavesAdapter.ViewHolder> 
                         .into(ivImage);
             }
 
-            // Tombol hapus dari favorites
+            // Tombol hapus dari favorites dengan konfirmasi
             tvDelete.setOnClickListener(v -> {
-                musicHelper = MusicHelper.getInstance(activity.getApplicationContext());
-                musicHelper.open();
-                int result = musicHelper.deleteById(String.valueOf(fave.getId()));
-                if (result > 0) {
-                    favorites.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
-                    Toast.makeText(activity,
-                            "Removed from Favorites",
-                            Toast.LENGTH_SHORT).show();
-                }
-                musicHelper.close();
+                ToastHelper.showConfirmDialog(activity, "PURGE_TRACK_FROM_FAVORITES?", () -> {
+                    musicHelper = MusicHelper.getInstance(activity.getApplicationContext());
+                    musicHelper.open();
+                    int result = musicHelper.deleteById(String.valueOf(fave.getId()));
+                    if (result > 0) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            favorites.remove(pos);
+                            notifyItemRemoved(pos);
+                            ToastHelper.showSuccess(activity, "TRACK_REMOVED_FROM_FAVORITES");
+                        }
+                    }
+                    musicHelper.close();
+                });
             });
         }
     }

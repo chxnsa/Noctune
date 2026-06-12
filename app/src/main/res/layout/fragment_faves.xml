@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/border_color"
+        android:background="@color/brand_yellow"
         android:orientation="vertical"
         android:paddingHorizontal="24dp"
         android:paddingTop="24dp"
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ARCHIVE . VOL_04"
-            android:textColor="@color/brand_yellow"
+            android:textColor="#000000"
             android:textSize="12sp"
             android:fontFamily="@font/space_mono"
             android:textStyle="bold"/>
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="YOUR FAVORITES"
-            android:textColor="@color/bg_surface"
+            android:textColor="#000000"
             android:textSize="40sp"
             android:fontFamily="@font/bebas_neue"
             android:lineSpacingMultiplier="0.85"

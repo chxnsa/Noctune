@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
@@ -16,6 +15,7 @@ import com.noctune.app.model.PlaylistTrack;
 import com.noctune.app.model.Track;
 import com.noctune.app.model.TrackArtist;
 import com.noctune.app.ui.DetailActivity;
+import com.noctune.app.ui.ToastHelper;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
@@ -86,7 +86,6 @@ public class PlaylistTrackAdapter extends
             }
 
             // Klik item → konversi ke Track lalu buka DetailActivity
-            // Fix No.8 — sebelumnya tidak ada listener sama sekali
             itemView.setOnClickListener(v -> {
                 Track detailTrack = convertToTrack(track);
 
@@ -95,20 +94,24 @@ public class PlaylistTrackAdapter extends
                 activity.startActivity(intent);
             });
 
-            // Hapus dari playlist
+            // Hapus dari playlist dengan konfirmasi
             tvRemove.setOnClickListener(v -> {
-                MusicHelper helper = MusicHelper.getInstance(
-                        activity.getApplicationContext());
-                helper.open();
-                helper.deleteTrackFromPlaylist(String.valueOf(track.getId()));
-                helper.close();
+                ToastHelper.showConfirmDialog(activity, "REMOVE_TRACK_FROM_PLAYLIST?", () -> {
+                    MusicHelper helper = MusicHelper.getInstance(
+                            activity.getApplicationContext());
+                    helper.open();
+                    helper.deleteTrackFromPlaylist(String.valueOf(track.getId()));
+                    helper.close();
 
-                tracks.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-                Toast.makeText(activity,
-                        "Removed from playlist", Toast.LENGTH_SHORT).show();
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        tracks.remove(pos);
+                        notifyItemRemoved(pos);
+                        ToastHelper.showSuccess(activity, "TRACK_REMOVED_FROM_PLAYLIST");
+                    }
 
-                if (listener != null) listener.onTrackRemoved();
+                    if (listener != null) listener.onTrackRemoved();
+                });
             });
         }
 

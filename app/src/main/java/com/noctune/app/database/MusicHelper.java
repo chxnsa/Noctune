@@ -146,4 +146,18 @@ public class MusicHelper {
         cursor.close();
         return exists;
     }
+
+    public boolean isTrackInPlaylist(String playlistId, String trackName, String artistName) {
+        String table = DatabaseContract.TABLE_PLAYLIST_TRACKS;
+
+        String selection = DatabaseContract.PlaylistTrackColumns.PLAYLIST_ID + " = ? AND " +
+                DatabaseContract.PlaylistTrackColumns.TRACK_NAME + " = ? AND " +
+                DatabaseContract.PlaylistTrackColumns.ARTIST_NAME + " = ?";
+        String[] selectionArgs = {playlistId, trackName, artistName};
+
+        Cursor cursor = database.query(table, null, selection, selectionArgs, null, null, null);
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
 }

@@ -49,22 +49,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ===== BURGER MENU =====
-        findViewById(R.id.tv_menu).setOnClickListener(v -> {
-            Toast.makeText(this,
-                    "NOCTUNE — Music Discovery App",
-                    Toast.LENGTH_SHORT).show();
-        });
-
         // ===== SEARCH ICON =====
         findViewById(R.id.tv_search_icon).setOnClickListener(v -> {
             BottomNavigationView nav = findViewById(R.id.bottom_navigation);
             if (nav.getSelectedItemId() != R.id.nav_home) {
                 nav.setSelectedItemId(R.id.nav_home);
             }
-            Toast.makeText(this,
-                    "Use the search bar to find tracks",
-                    Toast.LENGTH_SHORT).show();
+            // SEBELUMNYA: "Use the search bar to find tracks"
+            ToastHelper.showSuccess(this, "[SYSTEM_GUIDE: USE_SEARCH_BAR_TO_FIND_TRACKS]");
         });
 
         // ===== BOTTOM NAVIGATION =====

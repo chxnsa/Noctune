@@ -123,8 +123,7 @@ public class ExploreFragment extends Fragment {
     private void loadExploreData(String genre) {
         if (!NetworkUtils.isConnected(getActivity())) {
             btnRetry.setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(),
-                    "No internet connection", Toast.LENGTH_SHORT).show();
+            ToastHelper.showError(getActivity(), "[ERROR: NO_INTERNET_CONNECTION]");
             return;
         }
 
@@ -163,9 +162,7 @@ public class ExploreFragment extends Fragment {
                 public void onFailure(@NonNull Call<TopArtistsResponse> call,
                                       @NonNull Throwable t) {
                     handler.post(() -> {
-                        Toast.makeText(getActivity(),
-                                "Error loading artists",
-                                Toast.LENGTH_SHORT).show();
+                        ToastHelper.showError(getActivity(), "[CORE_ERROR: FAILED_TO_LOAD_ARTISTS]");
                     });
                 }
             });
@@ -201,9 +198,7 @@ public class ExploreFragment extends Fragment {
                 public void onFailure(@NonNull Call<TopTracksResponse> call,
                                       @NonNull Throwable t) {
                     handler.post(() -> {
-                        Toast.makeText(getActivity(),
-                                "Error loading tracks",
-                                Toast.LENGTH_SHORT).show();
+                        ToastHelper.showError(getActivity(), "[CORE_ERROR: FAILED_TO_LOAD_TRACKS]");
                         btnRetry.setVisibility(View.VISIBLE);
                     });
                 }

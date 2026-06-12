@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_layout_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/brutalist_flat_card"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp"
+    android:layout_gravity="center_horizontal">
+
+    <!-- Teks Log Konsol -->
+    <TextView
+        android:id="@+id/tv_toast_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[SYSTEM_LOG: SUCCESS]"
+        android:textColor="@color/brand_yellow"
+        android:textSize="13sp"
+        android:fontFamily="@font/space_mono"
+        android:textStyle="bold"/>
+</LinearLayout>

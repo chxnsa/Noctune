@@ -126,8 +126,7 @@ public class ChartsFragment extends Fragment {
     private void loadCharts(String country) {
         if (!NetworkUtils.isConnected(getActivity())) {
             btnRetry.setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(),
-                    "No internet connection", Toast.LENGTH_SHORT).show();
+            ToastHelper.showError(getActivity(), "[ERROR: NO_INTERNET_CONNECTION]");
             return;
         }
 
@@ -158,9 +157,8 @@ public class ChartsFragment extends Fragment {
                             chartAdapter.setTracks(
                                     response.body().getTracks().getTrack());
                         } else {
-                            Toast.makeText(getActivity(),
-                                    "No chart data available",
-                                    Toast.LENGTH_SHORT).show();
+                            // SEBELUMNYA: "No chart data available"
+                            ToastHelper.showSuccess(getActivity(), "[SYSTEM_LOG: NO_CHART_DATA_AVAILABLE]");
                             btnRetry.setVisibility(View.VISIBLE);
                         }
                     });
@@ -170,9 +168,8 @@ public class ChartsFragment extends Fragment {
                 public void onFailure(@NonNull Call<TopTracksResponse> call,
                                       @NonNull Throwable t) {
                     handler.post(() -> {
-                        Toast.makeText(getActivity(),
-                                "Error: " + t.getMessage(),
-                                Toast.LENGTH_SHORT).show();
+                        // SEBELUMNYA: "Error: " + t.getMessage()
+                        ToastHelper.showError(getActivity(), "[CORE_ERROR: " + t.getMessage().toUpperCase() + "]");
                         btnRetry.setVisibility(View.VISIBLE);
                     });
                 }

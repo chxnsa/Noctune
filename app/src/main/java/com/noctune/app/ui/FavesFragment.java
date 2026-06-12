@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import android.widget.Button;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,6 +45,10 @@ public class FavesFragment extends Fragment {
 
     private MusicHelper musicHelper;
     private boolean isFavesTab = true;
+
+    public interface OnConfirmListener {
+        void onConfirmed();
+    }
 
     @Nullable
     @Override
@@ -99,36 +104,54 @@ public class FavesFragment extends Fragment {
         if (showFaves) {
             viewFaves.setVisibility(View.VISIBLE);
             viewPlaylists.setVisibility(View.GONE);
-            tabFaves.setBackgroundColor(0xFFFFD600);
-            tabPlaylists.setBackgroundColor(0xFF000000);
+            // Mengikuti token warna adaptif
+            tabFaves.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.brand_yellow));
+            tabPlaylists.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.bg_surface));
         } else {
             viewFaves.setVisibility(View.GONE);
             viewPlaylists.setVisibility(View.VISIBLE);
-            tabFaves.setBackgroundColor(0xFF000000);
-            tabPlaylists.setBackgroundColor(0xFFFFD600);
+            tabFaves.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.bg_surface));
+            tabPlaylists.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(),R.color.brand_yellow));
             loadPlaylists();
         }
     }
 
     private void showCreatePlaylistDialog() {
+        // 1. Inflate layout kustom kita
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_playlist, null);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("NEW PLAYLIST");
+        builder.setView(dialogView);
 
-        // Input field
-        EditText input = new EditText(getActivity());
-        input.setHint("Playlist name...");
-        input.setPadding(40, 20, 40, 20);
-        builder.setView(input);
+        AlertDialog dialog = builder.create();
 
-        builder.setPositiveButton("CREATE", (dialog, which) -> {
-            String name = input.getText().toString().trim();
+        // 2. Hilangkan background bawaan android agar sudut kotak tajam kita kelihatan sempurna
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        // 3. Inisialisasi komponen di dalam layout kustom
+        EditText etPlaylistName = dialogView.findViewById(R.id.et_playlist_name);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+        Button btnCreate = dialogView.findViewById(R.id.btn_create);
+
+        // 4. Aksi Tombol Batal
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        // 5. Aksi Tombol Eksekusi Pembuatan
+        btnCreate.setOnClickListener(v -> {
+            String name = etPlaylistName.getText().toString().trim();
             if (!name.isEmpty()) {
                 createPlaylist(name);
+                dialog.dismiss();
+            } else {
+                // Memberi isyarat warna merah jika kosong
+                etPlaylistName.setHintTextColor(getResources().getColor(R.color.brand_red));
+                etPlaylistName.setHint("NAME_REQUIRED!");
             }
         });
 
-        builder.setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel());
-        builder.show();
+        dialog.show();
     }
 
     private void createPlaylist(String name) {
@@ -204,6 +227,38 @@ public class FavesFragment extends Fragment {
             });
         });
     }
+
+    private void showConfirmDeleteDialog(String message, OnConfirmListener listener) {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_delete, null);
+
+        androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView tvMessage = dialogView.findViewById(R.id.tv_confirm_message);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel_delete);
+        Button btnConfirm = dialogView.findViewById(R.id.btn_confirm_delete);
+
+        tvMessage.setText(message.toUpperCase());
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        // Di sini fungsi listener tadi bekerja!
+        btnConfirm.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onConfirmed(); // <--- Menjalankan perintah hapus yang dikirim
+            }
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+
 
     @Override
     public void onResume() {
