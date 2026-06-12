@@ -31,4 +31,12 @@ public interface ApiService {
             @Query("api_key") String apiKey,
             @Query("limit") int limit
     );
+
+    // Top tracks by tag/genre — untuk ExploreFragment
+    @GET("?method=tag.gettoptracks&format=json")
+    Call<TopTracksResponse> getTracksByTag(
+            @Query("tag") String tag,
+            @Query("api_key") String apiKey,
+            @Query("limit") int limit
+    );
 }
