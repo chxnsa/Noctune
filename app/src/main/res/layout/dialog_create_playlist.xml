@@ -6,28 +6,77 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/bg_surface"
-    android:strokeWidth="3"
     android:padding="20dp"
     android:layout_margin="16dp"
-    style="@style/BrutalistButton"
-    android:elevation="0dp">
+    style="@style/BrutalistButton">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CREATE NEW DIRECTORY"
+        android:textColor="@color/border_color"
+        android:textSize="12sp"
+        android:fontFamily="@font/space_mono"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
 
+    <!-- BRUTALIST IMAGE PICKER CONTAINER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Kotak Preview Gambar -->
+        <FrameLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="4dp"
+                android:background="@color/border_color"/>
+            <ImageView
+                android:id="@+id/iv_playlist_cover_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_main"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery"
+                android:padding="20dp" />
+        </FrameLayout>
+
+        <!-- Tombol Pilih Gambar -->
+        <TextView
+            android:id="@+id/btn_pick_cover"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/brand_yellow"
+            android:text="[CHOOSE_COVER_IMAGE]"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:fontFamily="@font/space_mono"
+            android:textStyle="bold"
+            android:gravity="center"
+            style="@style/BrutalistButton"/>
+    </LinearLayout>
+
+    <!-- Kolom Input Nama (Milikmu yang Sebelumnya) -->
     <EditText
         android:id="@+id/et_playlist_name"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:background="@drawable/brutalist_flat_card"
-        android:fontFamily="@font/space_mono"
-        android:hint="INPUT PLAYLIST NAME..."
-        android:textColorHint="@color/text_secondary"
-        android:textColor="@color/text_primary"
+        android:hint="ENTER PLAYLIST NAME..."
         android:paddingHorizontal="16dp"
+        android:fontFamily="@font/space_mono"
         android:textSize="14sp"
-        android:inputType="text"
-        android:maxLines="1"
         android:layout_marginBottom="20dp"/>
 
+    <!-- Pilihan Tombol Aksi (Milikmu yang Sebelumnya) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -49,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.3"
-            android:text="SAVE"
+            android:text="CREATE"
             android:layout_marginLeft="4dp"
             app:backgroundTint="@color/brand_yellow"
             android:textColor="#000000"

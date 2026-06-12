@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -49,6 +50,22 @@ public class FavesFragment extends Fragment {
     public interface OnConfirmListener {
         void onConfirmed();
     }
+
+    private android.net.Uri selectedImageUri = null;
+    private ImageView ivCoverPreview; // Akses global agar bisa diganti setelah user memilih gambar
+
+    // Launcher untuk membuka Galeri Gambar kustom
+    private final androidx.activity.result.ActivityResultLauncher<String> pickImageLauncher =
+            registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.GetContent(),
+                    uri -> {
+                        if (uri != null) {
+                            selectedImageUri = uri;
+                            if (ivCoverPreview != null) {
+                                ivCoverPreview.setPadding(0, 0, 0, 0); // Hilangkan padding icon bawaan
+                                ivCoverPreview.setImageURI(uri); // Tampilkan gambar pilihan user
+                            }
+                        }
+                    });
 
     @Nullable
     @Override
@@ -136,27 +153,40 @@ public class FavesFragment extends Fragment {
 
     private void showCreatePlaylistDialog() {
         if (getActivity() == null) return;
-        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_playlist, null);
 
+        // Reset URI gambar setiap kali dialog baru dibuka
+        selectedImageUri = null;
+
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_playlist, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(dialogView);
-
         AlertDialog dialog = builder.create();
 
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
+        // Init komponen kustom baru
+        ivCoverPreview = dialogView.findViewById(R.id.iv_playlist_cover_preview);
+        TextView btnPickCover = dialogView.findViewById(R.id.btn_pick_cover);
         EditText etPlaylistName = dialogView.findViewById(R.id.et_playlist_name);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
         Button btnCreate = dialogView.findViewById(R.id.btn_create);
+
+        // Aksi saat tombol [CHOOSE_COVER_IMAGE] ditekan
+        btnPickCover.setOnClickListener(v -> {
+            // Membuka galeri sistem dan menyaring hanya file gambar saja
+            pickImageLauncher.launch("image/*");
+        });
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
         btnCreate.setOnClickListener(v -> {
             String name = etPlaylistName.getText().toString().trim();
             if (!name.isEmpty()) {
-                createPlaylist(name);
+                // Ambil string URI jika ada, jika tidak kosongkan
+                String coverStr = (selectedImageUri != null) ? selectedImageUri.toString() : "";
+                createPlaylist(name, coverStr);
                 dialog.dismiss();
             } else {
                 etPlaylistName.setHintTextColor(getResources().getColor(R.color.brand_red));
@@ -167,7 +197,7 @@ public class FavesFragment extends Fragment {
         dialog.show();
     }
 
-    private void createPlaylist(String name) {
+    private void createPlaylist(String name, String coverUri) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -177,13 +207,13 @@ public class FavesFragment extends Fragment {
             ContentValues values = new ContentValues();
             values.put(DatabaseContract.PlaylistColumns.PLAYLIST_NAME, name);
             values.put(DatabaseContract.PlaylistColumns.CREATED_AT,
-                    new SimpleDateFormat("dd MMM yyyy",
-                            Locale.getDefault()).format(new Date()));
+                    new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(new Date()));
+            values.put(DatabaseContract.PlaylistColumns.PLAYLIST_COVER, coverUri); // Simpan URI Gambar ke SQLite
 
             musicHelper.insertPlaylist(values);
 
             handler.post(() -> {
-                if (isAdded()) { // Proteksi lifecycle fragment
+                if (isAdded()) {
                     loadPlaylists();
                 }
             });

@@ -36,11 +36,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "CREATE TABLE %s" +
                             " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
                             " %s TEXT NOT NULL," +
-                            " %s TEXT)",
+                            " %s TEXT," + // <-- Menyimpan CREATED_AT
+                            " %s TEXT)",  // <-- Menyimpan PLAYLIST_COVER
                     DatabaseContract.TABLE_PLAYLIST,
                     DatabaseContract.PlaylistColumns._ID,
                     DatabaseContract.PlaylistColumns.PLAYLIST_NAME,
-                    DatabaseContract.PlaylistColumns.CREATED_AT
+                    DatabaseContract.PlaylistColumns.CREATED_AT,
+                    DatabaseContract.PlaylistColumns.PLAYLIST_COVER
             );
 
     // Tabel playlist_tracks

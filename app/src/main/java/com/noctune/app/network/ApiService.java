@@ -3,7 +3,6 @@ package com.noctune.app.network;
 import com.noctune.app.model.TopTracksResponse;
 import com.noctune.app.model.TopArtistsResponse;
 import com.noctune.app.model.ArtistInfoResponse;
-import com.noctune.app.model.ArtistTopTracksResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -43,7 +42,7 @@ public interface ApiService {
     );
 
     @GET("?method=artist.gettoptracks&format=json")
-    Call<ArtistTopTracksResponse> getArtistTopTracks(
+    Call<TopTracksResponse> getArtistTopTracks(
             @Query("artist") String artist,
             @Query("api_key") String apiKey,
             @Query("limit") int limit
@@ -54,4 +53,6 @@ public interface ApiService {
             @Query("artist") String artist,
             @Query("api_key") String apiKey
     );
+
+
 }

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.noctune.app.R;
@@ -103,35 +105,13 @@ public class DetailActivity extends AppCompatActivity {
             tvPlaycount.setText(formatCount(track.getPlaycount()));
             tvDuration.setText(formatDuration(track.getDuration()));
 
-            if (track != null) {
-                tvTrackName.setText(track.getName());
-
-                if (track.getArtist() != null) {
-                    tvArtistName.setText(track.getArtist().getName());
-
-                    // Klik Nama Artis -> Ke ArtistDetailActivity
-                    tvArtistName.setOnClickListener(v -> {
-                        Intent intent = new Intent(DetailActivity.this, ArtistDetailActivity.class);
-                        intent.putExtra("artist_name", track.getArtist().getName());
-                        startActivity(intent);
-                    });
-                }
-
-                tvListeners.setText(formatCount(track.getListeners()));
-                tvPlaycount.setText(formatCount(track.getPlaycount()));
-                tvDuration.setText(formatDuration(track.getDuration()));
-
-                String artistName = track.getArtist() != null ? track.getArtist().getName() : "";
-                com.noctune.app.utils.ImageLoader.loadTrackImage(
-                        ivImage,
-                        track.getImageUrl(),
-                        track.getName(),
-                        artistName
-                );
-
-                checkFavoriteStatus();
-                loadLyrics();
-            }
+            String artistName = track.getArtist() != null ? track.getArtist().getName() : "";
+            com.noctune.app.utils.ImageLoader.loadTrackImage(
+                    ivImage,
+                    track.getImageUrl(),
+                    track.getName(),
+                    artistName
+            );
 
             checkFavoriteStatus();
             loadLyrics();
@@ -206,8 +186,6 @@ public class DetailActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // ---- Method lainnya tetap sama seperti sebelumnya ----
-
     private void checkFavoriteStatus() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
@@ -266,7 +244,6 @@ public class DetailActivity extends AppCompatActivity {
 
             handler.post(() -> {
                 updateFaveButton();
-                // SEBELUMNYA: isFavorite ? "Added to Favorites!" : "Removed from Favorites"
                 if (isFavorite) {
                     ToastHelper.showSuccess(DetailActivity.this, "[ADDED TO FAVORITES]");
                 } else {
@@ -350,40 +327,11 @@ public class DetailActivity extends AppCompatActivity {
                 Button btnCancel = dialogView.findViewById(R.id.btn_cancel_dialog);
                 Button btnConfirm = dialogView.findViewById(R.id.btn_confirm_dialog);
 
-                // 2. Buat list String nama playlist (dibuat Kapital) untuk dimasukkan ke Spinner
-                ArrayList<String> playlistNames = new ArrayList<>();
-                for (Playlist p : playlists) {
-                    playlistNames.add(p.getName().toUpperCase());
-                }
-
-                // 3. Pasang Array Adapter kustom menggunakan layout item_spinner_playlist kita
-                android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<String>(
-                        this,
-                        R.layout.item_spinner_playlist,
-                        R.id.tv_spinner_item, // SUNTIKKAN ID INI AGAR TIDAK ERROR
-                        playlistNames
-                ) {
-                    @NonNull
-                    @Override
-                    public View getView(int position, View convertView, @NonNull android.view.ViewGroup parent) {
-                        View view = super.getView(position, convertView, parent);
-                        // Memastikan background utama spinner tetap transparan agar mengikuti brutalist_flat_card
-                        view.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-                        return view;
-                    }
-
-                    @Override
-                    public View getDropDownView(int position, View convertView, @NonNull android.view.ViewGroup parent) {
-                        // Paksa baris dropdown menggunakan layout kustom dan mengarah ke ID TextView yang benar
-                        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_spinner_playlist, parent, false);
-                        TextView textView = view.findViewById(R.id.tv_spinner_item);
-                        if (textView != null) {
-                            textView.setText(getItem(position));
-                        }
-                        return view;
-                    }
-                };
+                // ==================== OPERASI REFACTOR ADAPTER ====================
+                // Hubungkan langsung objek model 'playlists' ke Custom Spinner Adapter buatanmu
+                PlaylistSpinnerAdapter adapter = new PlaylistSpinnerAdapter(this, playlists);
                 spinnerPlaylists.setAdapter(adapter);
+                // ==================================================================
 
                 // 4. Tombol Aksi Eksekusi
                 btnConfirm.setOnClickListener(v -> {
@@ -418,11 +366,10 @@ public class DetailActivity extends AppCompatActivity {
 
             if (isAlreadyAdded) {
                 handler.post(() -> {
-                    // Tembakkan Toast Error jika data duplikat terdeteksi!
                     ToastHelper.showError(DetailActivity.this,
                             "[DENIED: '" + track.getName().toUpperCase() + "' ALREADY EXISTS IN " + playlist.getName().toUpperCase() + "]");
                 });
-                return; // Gagalkan operasi insert database
+                return;
             }
 
             // Jika lolos validasi, lakukan komit insert seperti biasa
@@ -444,5 +391,66 @@ public class DetailActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private class PlaylistSpinnerAdapter extends android.widget.ArrayAdapter<Playlist> {
+
+        public PlaylistSpinnerAdapter(android.content.Context context, java.util.ArrayList<Playlist> playlists) {
+            super(context, R.layout.item_spinner_playlist, playlists);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        private View createCustomView(int position, View convertView, ViewGroup parent) {
+            // 1. Inflate view jika belum ada
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_spinner_playlist, parent, false);
+            }
+
+            // 2. Ambil data playlist berdasarkan posisi baris spinner
+            Playlist playlist = getItem(position);
+
+            ImageView ivCover = convertView.findViewById(R.id.iv_spinner_playlist_cover);
+            TextView tvName = convertView.findViewById(R.id.tv_spinner_item);
+
+            // Paksa background item transparan agar mengikuti tema brutalist dialog kamu
+            convertView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+
+            if (playlist != null) {
+                // 3. Set Teks Nama Playlist (Ubah jadi Kapital)
+                if (tvName != null) {
+                    tvName.setText(playlist.getName().toUpperCase());
+                }
+
+                // 4. Load Gambar Cover secara aman
+                String coverUriStr = playlist.getCover();
+                if (ivCover != null) {
+                    if (coverUriStr != null && !coverUriStr.isEmpty()) {
+                        try {
+                            ivCover.setPadding(0, 0, 0, 0);
+                            ivCover.setImageURI(android.net.Uri.parse(coverUriStr));
+                        } catch (Exception e) {
+                            // Jika uri rusak, pasang icon launcher sebagai placeholder kustom
+                            ivCover.setImageResource(R.drawable.sample_album);
+                        }
+                    } else {
+                        // Jika tidak ada cover kustom, pakai placeholder default
+                        ivCover.setImageResource(R.drawable.sample_album);
+                    }
+                }
+            }
+
+            // 5. SELESAI & KEMBALIKAN VIEW YANG BERHASIL DI-RENDER
+            return convertView;
+        }
     }
 }

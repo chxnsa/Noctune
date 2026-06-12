@@ -36,19 +36,30 @@ public class MappingHelper {
     }
 
     public static ArrayList<Playlist> mapCursorToPlaylists(Cursor cursor) {
-        ArrayList<Playlist> playlists = new ArrayList<>();
+        ArrayList<Playlist> playlistList = new ArrayList<>();
 
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.PlaylistColumns._ID));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.PlaylistColumns.PLAYLIST_NAME));
-            String createdAt = cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.PlaylistColumns.CREATED_AT));
+        // Menggunakan while (cursor.moveToNext()) jauh lebih aman dan bersih
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.PlaylistColumns._ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PlaylistColumns.PLAYLIST_NAME));
 
-            playlists.add(new Playlist(id, name, createdAt, 0));
+                // Menghindari crash jika kolom CREATED_AT sewaktu-waktu bernilai null/kosong
+                int createdAtIndex = cursor.getColumnIndex(DatabaseContract.PlaylistColumns.CREATED_AT);
+                String createdAt = (createdAtIndex != -1) ? cursor.getString(createdAtIndex) : "";
+
+                String cover = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PlaylistColumns.PLAYLIST_COVER));
+
+                Playlist playlist = new Playlist();
+                playlist.setId(id);
+                playlist.setName(name);
+                playlist.setCreatedAt(createdAt);
+                playlist.setCover(cover);
+
+                playlistList.add(playlist);
+            }
         }
-        return playlists;
+        return playlistList;
     }
 
     public static ArrayList<PlaylistTrack> mapCursorToPlaylistTracks(Cursor cursor) {

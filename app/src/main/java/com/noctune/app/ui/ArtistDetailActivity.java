@@ -7,14 +7,13 @@ import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.noctune.app.R;
 import com.noctune.app.adapter.TrackAdapter;
 import com.noctune.app.model.ArtistInfoResponse;
-import com.noctune.app.model.ArtistTopTracksResponse;
+import com.noctune.app.model.TopTracksResponse;
 import com.noctune.app.network.ApiService;
 import com.noctune.app.network.RetrofitClient;
 import com.noctune.app.utils.Constants;
@@ -62,11 +61,10 @@ public class ArtistDetailActivity extends AppCompatActivity {
 
         apiService = RetrofitClient.getClient().create(ApiService.class);
 
-        if (artistName != null) {
-            tvName.setText(artistName.toUpperCase());
-            loadArtistInfo();
-            loadArtistTracks();
-        }
+        tvName.setText(artistName != null ? artistName.toUpperCase() : "");
+
+        loadArtistInfo();
+        loadArtistTracks();
     }
 
     private void loadArtistInfo() {
@@ -79,25 +77,31 @@ public class ArtistDetailActivity extends AppCompatActivity {
 
             call.enqueue(new Callback<ArtistInfoResponse>() {
                 @Override
-                public void onResponse(@NonNull Call<ArtistInfoResponse> call,
-                                       @NonNull Response<ArtistInfoResponse> response) {
+                public void onResponse(Call<ArtistInfoResponse> call,
+                                       Response<ArtistInfoResponse> response) {
                     handler.post(() -> {
                         if (response.isSuccessful() && response.body() != null
                                 && response.body().getArtist() != null) {
 
                             var artist = response.body().getArtist();
 
+                            // Stats
                             if (artist.getStats() != null) {
-                                tvListeners.setText(formatCount(artist.getStats().getListeners()));
-                                tvPlaycount.setText(formatCount(artist.getStats().getPlaycount()));
+                                tvListeners.setText(formatCount(
+                                        artist.getStats().getListeners()));
+                                tvPlaycount.setText(formatCount(
+                                        artist.getStats().getPlaycount()));
                             }
 
-                            if (artist.getBio() != null && artist.getBio().getSummary() != null) {
+                            // Bio — strip HTML tags
+                            if (artist.getBio() != null
+                                    && artist.getBio().getSummary() != null) {
                                 String bioText = Html.fromHtml(
                                         artist.getBio().getSummary(),
                                         Html.FROM_HTML_MODE_LEGACY
                                 ).toString();
 
+                                // Hapus link "Read more on Last.fm" di akhir
                                 int cutIndex = bioText.indexOf("Read more");
                                 if (cutIndex != -1) {
                                     bioText = bioText.substring(0, cutIndex).trim();
@@ -105,14 +109,18 @@ public class ArtistDetailActivity extends AppCompatActivity {
                                 tvBio.setText(bioText);
                             }
 
-                            ImageLoader.loadArtistImage(ivArtist, artist.getImageUrl(), artistName);
+                            // Image dengan fallback iTunes
+                            ImageLoader.loadArtistImage(
+                                    ivArtist, artist.getImageUrl(), artistName);
                         }
                     });
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ArtistInfoResponse> call, @NonNull Throwable t) {
-                    handler.post(() -> ImageLoader.loadArtistImage(ivArtist, "", artistName));
+                public void onFailure(Call<ArtistInfoResponse> call, Throwable t) {
+                    handler.post(() -> {
+                        ImageLoader.loadArtistImage(ivArtist, "", artistName);
+                    });
                 }
             });
         });
@@ -123,31 +131,33 @@ public class ArtistDetailActivity extends AppCompatActivity {
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
-            // Gunakan ArtistTopTracksResponse untuk menangani kunci JSON "toptracks"
-            Call<ArtistTopTracksResponse> call = apiService.getArtistTopTracks(
+            Call<TopTracksResponse> call = apiService.getArtistTopTracks(
                     artistName, Constants.API_KEY, 20);
 
-            call.enqueue(new Callback<ArtistTopTracksResponse>() {
+            call.enqueue(new Callback<TopTracksResponse>() {
                 @Override
-                public void onResponse(@NonNull Call<ArtistTopTracksResponse> call,
-                                       @NonNull Response<ArtistTopTracksResponse> response) {
+                public void onResponse(Call<TopTracksResponse> call,
+                                       Response<TopTracksResponse> response) {
                     handler.post(() -> {
                         if (response.isSuccessful() && response.body() != null
-                                && response.body().getTopTracks() != null) {
-                            trackAdapter.setTracks(response.body().getTopTracks().getTrack());
+                                && response.body().getTracks() != null) {
+                            trackAdapter.setTracks(
+                                    response.body().getTracks().getTrack());
                         } else {
                             Toast.makeText(ArtistDetailActivity.this,
-                                    "[SYSTEM_LOG: NO_TRACKS_FOUND]",
+                                    "No tracks found",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ArtistTopTracksResponse> call, @NonNull Throwable t) {
-                    handler.post(() -> Toast.makeText(ArtistDetailActivity.this,
-                            "[SYSTEM_LOG: ERROR_LOADING_TRACKS]",
-                            Toast.LENGTH_SHORT).show());
+                public void onFailure(Call<TopTracksResponse> call, Throwable t) {
+                    handler.post(() -> {
+                        Toast.makeText(ArtistDetailActivity.this,
+                                "Error loading tracks",
+                                Toast.LENGTH_SHORT).show();
+                    });
                 }
             });
         });

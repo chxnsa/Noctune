@@ -8,16 +8,13 @@
     android:background="@drawable/brutalist_flat_card"
     android:gravity="center_vertical">
 
-    <TextView
+    <ImageView
+        android:id="@+id/iv_playlist_image"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:text="♫"
-        android:textColor="#000000"
-        android:textSize="22sp"
-        android:gravity="center"
         android:background="@color/brand_yellow"
-        android:layout_gravity="center_vertical"
-        android:textStyle="bold"/>
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_vertical" />
 
     <LinearLayout
         android:layout_width="0dp"

@@ -20,6 +20,7 @@ public class DatabaseContract {
     public static final class PlaylistColumns implements BaseColumns {
         public static String PLAYLIST_NAME = "playlist_name";
         public static String CREATED_AT = "created_at";
+        public static final String PLAYLIST_COVER = "playlist_cover";
     }
 
     public static String TABLE_PLAYLIST_TRACKS = "playlist_tracks";
