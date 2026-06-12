@@ -19,6 +19,18 @@ public class Track implements Parcelable {
     @SerializedName("image")
     private List<TrackImage> images;
 
+    public Track(String name, String duration, String playcount,
+                 String listeners, String url, TrackArtist artist,
+                 String imageUrl) {
+        this.name = name;
+        this.duration = duration;
+        this.playcount = playcount;
+        this.listeners = listeners;
+        this.url = url;
+        this.artist = artist;
+        this.cachedImageUrl = imageUrl;
+    }
+
     public String getName() { return name; }
     public String getDuration() { return duration; }
     public String getPlaycount() { return playcount; }
