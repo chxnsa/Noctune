@@ -63,21 +63,44 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <!-- TOGGLE TEMA BRUTALIST -->
-            <TextView
-                android:id="@+id/tv_theme_toggle"
+            <!-- TOGGLE TEMA — Square Switch LIGHT/DARK -->
+            <LinearLayout
+                android:id="@+id/theme_toggle_container"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="[ MODE: DARK ]"
-                android:textColor="@color/text_primary"
-                android:textSize="12sp"
-                android:fontFamily="@font/space_mono"
-                android:textStyle="bold"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:layout_marginEnd="12dp"
-                android:clickable="true"
-                android:focusable="true" />
+                android:layout_height="32dp"
+                android:orientation="horizontal"
+                android:background="@color/text_primary"
+                android:layout_marginEnd="12dp">
+
+                <!-- LIGHT -->
+                <TextView
+                    android:id="@+id/tv_mode_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="LIGHT"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/space_mono"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <!-- DARK -->
+                <TextView
+                    android:id="@+id/tv_mode_dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="DARK"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/space_mono"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+            </LinearLayout>
 
             <!-- TOMBOL SEARCH -->
             <TextView
